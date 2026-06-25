@@ -8,11 +8,11 @@ They're shared here as-is, generalized so anyone can use them, with a way to cal
 
 ## What's in here
 
+- **`/profile-builder`** — Run this first. It's a short questionnaire that asks about the actual feedback you've gotten, what's cost you the most, and how you tend to respond to pushback — then calibrates the four skills above to your specific patterns instead of generic advice.
 - **`/thought-partner`** — Loop this in from the start. Share the assignment and talk through your thinking out loud. It's built to push back, notice what's being glossed over, and know when to develop an idea vs. when to challenge it — not to hand you answers.
 - **`/assignment-framing`** — Once you have a rough sense of direction, use this to structure the actual attack plan: what's really being evaluated, what a strong answer covers, and where the common traps are.
 - **`/assignment-evaluator`** — Once you've got a draft, use this for honest, specific feedback before you submit. Not cheerleading — a real read on what's missing.
 - **`/prototype-builder`** — If the assignment calls for a mockup or interactive demo, this researches the actual product first, then builds a prototype that matches real UI patterns with your new feature layered on top.
-- **`/profile-builder`** — Run this first. It's a short questionnaire that asks about the actual feedback you've gotten, what's cost you the most, and how you tend to respond to pushback — then calibrates the four skills above to your specific patterns instead of generic advice.
 
 ## Getting started
 
