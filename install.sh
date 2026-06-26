@@ -58,3 +58,13 @@ esac
 echo ""
 echo "Done. Restart Claude Code or Cursor (a fresh window/session, not just a new chat) and type / to confirm the skills show up."
 echo "Run /profile-builder first to calibrate the rest to your own gaps."
+echo ""
+echo "Note: if this folder is also a git repo you cloned, your personalized SKILL.md edits"
+echo "could show up as changes git wants to commit. To stop git from tracking local edits"
+echo "to these files (so /profile-builder's changes never get staged or pushed), run:"
+echo ""
+for skill in "${SKILLS[@]}"; do
+  echo "  git update-index --skip-worktree \"$skill/SKILL.md\""
+done
+echo ""
+echo "This is optional but recommended if you're using Cursor or Claude Code inside a git-tracked clone."
