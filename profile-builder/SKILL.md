@@ -89,6 +89,8 @@ Behavioral pattern (if surfaced): [how they respond to live pushback, and what t
 
 ## Applying the profile to the four skills
 
+**Do not commit or push these changes to git, and do not ask to.** This is a local personalization step — the edited skill files should exist only on the person's machine, not in version control or any shared/main branch. If your environment (e.g. Cursor, Claude Code) prompts you to stage, commit, or push after editing files, decline that prompt and proceed with local file edits only. If asked, tell the person these are personal, local-only edits and they can choose to manage them in git themselves if they want — but you should never initiate or suggest a commit as part of this skill.
+
 Each of the four target skills has named placeholder sections (typically called "Watchlist," "[Name]'s trap," or "[Name]'s specific risk here" in the original). Your job:
 
 1. Open each target skill file
