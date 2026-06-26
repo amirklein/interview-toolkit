@@ -25,7 +25,7 @@ These are built using the open [Agent Skills](https://agentskills.io) format —
 ```bash
 git clone [repo-url]
 cd interview-toolkit
-./install.sh
+bash install.sh
 ```
 
 The script will ask where you want to install (Claude Code, Cursor, both, this-project-only, or all-projects) and copy the five skill folders there for you.
@@ -63,6 +63,8 @@ cp -r profile-builder thought-partner assignment-framing assignment-evaluator pr
 Restart Claude Code or Cursor — a full restart, not just a new chat, the first time you add a skills directory. Type `/` to confirm all five skills show up, then run `/profile-builder` first.
 
 If a skill doesn't appear: double-check the `SKILL.md` file landed directly inside its named folder (e.g. `~/.cursor/skills/profile-builder/SKILL.md`), not nested one extra level deep — that's the most common cause.
+
+**A note on git:** `/profile-builder` edits these `SKILL.md` files locally to personalize them to you. It's instructed not to commit or push those changes — but if you installed the skills *inside* a git-tracked clone of this repo (rather than to `~/.cursor/skills` or `~/.claude/skills`), your IDE/agent may still prompt you to commit the edits, since that's standard editor behavior, not something a skill's instructions can always override. `install.sh` prints an optional command (`git update-index --skip-worktree`) you can run to stop git from tracking changes to those specific files, so your personalization never accidentally gets staged or pushed.
 
 Once `/profile-builder` has run, the other four skills will have your specific gaps written into their "watchlist" sections. Re-run it any time your feedback or target role changes.
 
