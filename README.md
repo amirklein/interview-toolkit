@@ -22,7 +22,7 @@ These are built using the open [Agent Skills](https://agentskills.io) format —
 
 ### Quick install (recommended)
 
-Open Cursor Agent or Claude Code and simply paste ask it to install the skills from this GitHub repo:
+Open Cursor Agent or Claude Code and simply ask it to install the skills from this GitHub repo (you can simply copy and paste this prompt):
 
 _Install these skills: https://github.com/amirklein/interview-toolkit_
 
