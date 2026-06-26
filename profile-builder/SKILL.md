@@ -20,6 +20,8 @@ A diagnostic questionnaire that personalizes the interview-prep toolkit (`though
 
 ## The flow
 
+All questions are asked in a questoinnaire format, meaning the users will select the answers they want.
+
 ### Step 1: Discipline select (single-select, no free text needed here)
 
 Ask: "What's your discipline?"
