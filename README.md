@@ -22,35 +22,11 @@ These are built using the open [Agent Skills](https://agentskills.io) format —
 
 ### Quick install (recommended)
 
-```bash
-git clone [repo-url]
-cd interview-toolkit
-bash install.sh
-```
+Open Cursor Agent or Claude Code and simply paste ask it to install the skills from this GitHub repo:
 
-The script will ask where you want to install (Claude Code, Cursor, both, this-project-only, or all-projects) and copy the five skill folders there for you.
+_Install these skills: https://github.com/amirklein/interview-toolkit_
 
 ### Manual install
-
-If you'd rather do it by hand or the script doesn't work for your setup:
-
-**Claude Code:**
-```bash
-git clone [repo-url]
-cd interview-toolkit
-mkdir -p ~/.claude/skills
-cp -r profile-builder thought-partner assignment-framing assignment-evaluator prototype-builder ~/.claude/skills/
-```
-(Use `.claude/skills` at your project root instead of `~/.claude/skills` if you only want this for one project.)
-
-**Cursor (2.4 or later):**
-```bash
-git clone [repo-url]
-cd interview-toolkit
-mkdir -p ~/.cursor/skills
-cp -r profile-builder thought-partner assignment-framing assignment-evaluator prototype-builder ~/.cursor/skills/
-```
-(Use `.cursor/skills` at your project root instead of `~/.cursor/skills` if you only want this for one project.)
 
 **Claude.ai or Claude Desktop:**
 1. Clone this repo or download it as a zip
