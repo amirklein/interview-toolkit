@@ -18,13 +18,15 @@ A diagnostic questionnaire that personalizes the interview-prep toolkit (`though
 - It does not touch the methodology sections (research steps, dimension frameworks, structure, tone guidance) — those are discipline-tested and not personal.
 - It does not insert anything vaguer than what's already in the generic placeholder. If the questionnaire output isn't more specific than the default, leave the default alone.
 
-## The flow
+## A note on how to ask
 
-All questions are asked in a questoinnaire format, meaning the users will select the answers they want.
+**Use your environment's native structured-question / multiple-choice UI tool for every question in this flow, not plain text.** Most agent environments that support this skill format (Cursor, Claude Code, Claude.ai/Desktop) have a dedicated tool for presenting selectable options to the user — sometimes called an "ask questions" tool, a form/UI tool, or similar — rather than just typing the question as a chat message. If such a tool is available to you, use it for every question below, including the multi-select gap questions, the ranking step, and the free-text invites (most of these tools support an open-text option alongside the choices). Only fall back to plain text questions if no such tool exists in your current environment. Defaulting to plain text when a structured tool is available makes the questionnaire slower and more error-prone for the person answering — this defeats much of the point of building it as a skill in the first place.
+
+## The flow
 
 ### Step 1: Discipline select (single-select, no free text needed here)
 
-Ask: "What's your discipline?"
+Ask, using your native question UI if available: "What's your discipline?"
 - Product
 - Design
 - Engineering
@@ -36,7 +38,7 @@ This determines which gap-option set loads next. See `references/discipline-bran
 
 ### Step 2: Level + context (within the selected branch)
 
-Ask 1-2 questions calibrated to that discipline about seniority target and the type of environment they operate in (e.g. for Product: B2B/B2C/mixed; for Sales: SMB/enterprise; for Design: in-house/agency, etc.). Keep this short — it's context, not the diagnostic itself.
+Ask, using your native question UI, 1-2 questions calibrated to that discipline about seniority target and the type of environment they operate in (e.g. for Product: B2B/B2C/mixed; for Sales: SMB/enterprise; for Design: in-house/agency, etc.). Keep this short — it's context, not the diagnostic itself.
 
 ### Step 3: Gap identification (multi-select + free text, ALWAYS)
 
@@ -54,24 +56,24 @@ For the Product branch specifically, you have richer real-world calibration avai
 
 ### Step 4: Follow-up on each selected gap (multi-select + free text, ALWAYS)
 
-For every gap they selected in Step 3, ask one follow-up that breaks it into more specific flavors. Same rule: multi-select, always include free text, always follow up on free text.
+For every gap they selected in Step 3, ask one follow-up using your native question UI, breaking it into more specific flavors. Same rule: multi-select, always include free text, always follow up on free text.
 
 ### Step 5: Forced ranking (single-select — NEVER multi-select)
 
 This is the most important mechanical rule in this entire skill: **the ranking step must be single-select.** Its entire purpose is to force prioritization. If someone could select multiple "top" gaps, the exercise produces a list, not a profile, and the personalization downstream will be unfocused.
 
-Ask: "Of these, which has cost you the most — the one you'd fix first if you could only fix one?"
+Ask, using your native question UI: "Of these, which has cost you the most — the one you'd fix first if you could only fix one?"
 
 ### Step 6: Final free-text invite on the ranked gap
 
-After they rank, ask one more open question specifically about the #1 gap:
+After they rank, ask one more open question specifically about the #1 gap, using your native question UI's free-text option if it has one, or plain text if not (open-ended questions are the one case where plain text is often the more natural choice even when a UI tool exists):
 > "Is there anything about how [ranked gap] shows up for you specifically that the questions above didn't quite capture?"
 
 This is where the sharpest, most usable detail tends to surface (e.g., "my developers and designers are missing practical steps to take into action in sprints" — a concrete, falsifiable bar that's far more useful than "needs more execution depth").
 
 ### Step 7 (optional but valuable): Behavioral pattern under pushback
 
-Ask how they tend to respond when someone pushes back on their thinking — in live conversation specifically, not just in writing. This one question can produce an instruction that changes *how Claude itself should behave* in the `thought-partner` skill (e.g., "push back at least twice before treating agreement as resolution" for someone who tends to cave under live pressure). This is a different and often more valuable kind of personalization than anything about document content.
+Ask, using your native question UI, how they tend to respond when someone pushes back on their thinking — in live conversation specifically, not just in writing. This one question can produce an instruction that changes *how Claude itself should behave* in the `thought-partner` skill (e.g., "push back at least twice before treating agreement as resolution" for someone who tends to cave under live pressure). This is a different and often more valuable kind of personalization than anything about document content.
 
 Don't force this question if the flow already feels long — use judgment. But if it comes up naturally or the person seems rushed through earlier questions, it's worth asking explicitly.
 
