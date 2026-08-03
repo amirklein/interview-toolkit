@@ -1,146 +1,234 @@
 ---
 name: assignment-evaluator
 description: >
-  Use this skill whenever the person shares a completed take-home assignment and wants evaluation, critique, or feedback before submitting. Triggers include: review my assignment, what's missing, how does this look, is this good enough, evaluate this, give me feedback on this, what would a reviewer think. Also trigger when the person shares both a brief AND a completed response in the same conversation and asks for any form of assessment. This skill can be calibrated to your own rejection history and the senior/lead PM evaluation bar — run `/profile-builder` first for the sharpest results.
+  Use this skill whenever someone shares a completed take-home assignment or interview exercise and
+  wants evaluation, critique, or feedback before submitting. Triggers include: review my assignment,
+  what's missing, how does this look, is this good enough, evaluate this, grade this, poke holes in
+  this, what would a reviewer think. Also trigger when someone shares both a brief and a completed
+  response in the same conversation and asks for any form of assessment. Has two modes: a standard
+  evaluation, and a cold read that deliberately ignores conversational history to simulate a real
+  reviewer seeing the work for the first time. Works for any discipline; calibrates to the person via
+  ~/.interview-toolkit/profile.md.
 ---
 
-# Assignment Evaluator Skill
+# Assignment Evaluator
 
 ## Purpose
-Give the person the honest, specific, senior-PM-calibrated feedback they need *before* submitting — with a sharp eye on the gaps most likely to cost them an offer. Not cheerleading. Not generic. Real.
+
+Give honest, specific, calibrated feedback *before* a real reviewer does — with a sharp eye on the
+gaps most likely to cost the offer, and on whether the person's actual capability made it onto the
+page at all.
+
+Not cheerleading. Not generic. Real.
 
 ---
 
-## Step 1 — Ingest Both Documents
+## Before anything else: load the profile and rubric
+
+Personalization for this toolkit lives outside this file, in `~/.interview-toolkit/`:
+
+1. **Read `~/.interview-toolkit/profile.md`.** It holds what the person has actually done and their
+   ranked gaps.
+2. **Read the rubric named by the profile's `Discipline` line**, at
+   `~/.interview-toolkit/rubrics/<discipline>.md`. Its dimensions and its stated bar are what you
+   evaluate against, and **they replace the fallback dimensions at the bottom of this file.**
+3. **If either file is missing**, say so in one line — "running without a profile;
+   `/profile-builder` sets it up in about five minutes" — then use the fallback dimensions. Never
+   block on a missing profile.
+
+**One exception, and it matters:** in cold-read mode you load the rubric but hold the profile's gap
+list back until after the verdict. See the cold-read section below for why.
+
+If you have no filesystem access, ask once whether they have a profile to paste, then proceed either
+way.
+
+---
+
+## Step 1 — Ingest both documents
 
 You need two things:
-1. **The original brief** — what they asked for
-2. **The completed assignment** — what the person submitted
 
-If either is missing, ask for it before proceeding. You cannot evaluate a response without the brief — you need to know what was asked to judge whether it was answered.
+1. **The brief** — what was asked
+2. **The completed work** — what they're about to submit
 
-If files are provided (PDF, PPTX, DOCX), read them fully before commenting.
+If the brief is missing, ask for it before proceeding. You cannot judge whether something answered
+the question without knowing the question. If they can't produce it, say plainly that the evaluation
+will be weaker for it, then continue.
 
----
+Read files fully — PDF, PPTX, DOCX, whatever — before commenting on any of it.
 
-## Step 2 — First-Pass Read (Don't Critique Yet)
-
-Read the completed assignment all the way through before forming any opinions. On the first pass, note:
-- What is the person *actually* doing here? (their thesis, their structure, their depth)
-- What impression does this leave on the first read?
-- What would a senior hiring manager feel after reading this? (Excited? Underwhelmed? Confused? Impressed but with reservations?)
-
-Hold these impressions — you'll use them in Step 4.
+Also establish, in one question if it isn't obvious: **what's still changeable?** An evaluation
+delivered two hours before a deadline should prioritize differently from one delivered three days
+out. Ruthlessly rank by what they can still act on.
 
 ---
 
-## Step 3 — Evaluate Against the Five Senior PM Dimensions
+## Step 2 — First-pass read, no critique
 
-Score and critique each dimension. Be specific — no vague feedback.
+Read the whole thing through before forming opinions. On this pass, note only:
 
----
+- What is this person actually doing here — their thesis, structure, depth?
+- What impression does it leave on one read?
+- What would a reviewer *feel* on finishing? Excited, underwhelmed, confused, impressed with
+  reservations?
 
-### Dimension 1: Strategic Grasp (Vision & Direction)
-**What strong looks like**: A clear point of view on where this product/feature/capability is going and *why*. Long-term thinking is explicit, not implied. Trade-offs are named. The reader feels: "this person has an opinion and can defend it."
-
-**Evaluate**:
-- Is there a stated strategic direction, or does the work just describe what to build?
-- Does the person show awareness of the competitive or market landscape?
-- Is there a 1–3 year vision, even loosely?
-- Are decisions visibly flowing from a strategic north star, or do they feel ad hoc?
-
-**Common risk here**: Jumping to solutions without establishing *why this direction and not another*. If the strategy section feels like setup rather than conviction, flag it hard. (Run `/profile-builder` to make this specific to your own pattern.)
+Hold these. Step 5 uses them, and they're easy to lose once you start listing gaps.
 
 ---
 
-### Dimension 2: B2B Stakeholder Complexity
-**What strong looks like**: Every relevant stakeholder is named. Their goals, their pains, and where their interests conflict are explicit. The solution accounts for rollout across the org — not just end-user value.
+## Step 3 — Evaluate against the rubric
 
-**Evaluate** (especially for B2B assignments):
-- Are all stakeholders named? (economic buyer, end user, IT, CS, sales, internal teams)
-- Does the solution serve all of them — or just one?
-- Are stakeholder conflicts acknowledged?
-- Is there a sense of how this gets *sold internally* — not just built?
+Work through each dimension from the loaded rubric. For each, do three things:
 
-**Common risk here**: Designing for the end user and forgetting that in B2B, someone else approves the budget, someone else manages the rollout, and someone else gets blamed if it fails. If those people aren't in the doc, it reads as mid-level thinking.
+1. **Call it.** Strong, adequate, or weak. One word, stated plainly before the explanation. Prose
+   without a verdict lets everyone avoid the conclusion.
+2. **Cite the evidence.** Quote or point to the specific passage. "Section 3 is thin" is unusable;
+   "Section 3 names the feature and never defines the inputs or the fallback" is actionable.
+3. **Check the rubric's common risk.** Each dimension names the way capable people lose points there.
+   Check it explicitly, every time, even when the section looks fine — that's the entire reason it's
+   written down.
 
----
+Weight the brief's emphasis. A dimension the assignment barely touches shouldn't be graded as
+heavily as one it's built around. Say which dimensions you're weighting and why.
 
-### Dimension 3: Execution Depth (Developer-Ready Thinking)
-**What strong looks like**: A reader could hand this to an engineering team and they'd know what to build. Features are defined, not named. Scope is explicit — what's in, what's out, why. Edge cases are called out. Constraints are named.
-
-**Evaluate**:
-- Are features *defined* or just *named*? (e.g., "AI assistant" vs "an NLP layer that takes X input, processes via Y, returns Z output, with fallback W")
-- Is scope explicitly bounded — in and out?
-- Are edge cases and constraints called out?
-- Could an engineer start a sprint from this, or would they need a 2-hour discovery meeting first?
-
-**Common risk here**: The solution section reads like a pitch deck, not a spec. Good vision, light definition. The reviewer sees it and thinks "great PM for early discovery, not ready for execution ownership."
+**If the profile ranks specific gaps, check those first and hardest** — but check every dimension.
+A ranked gap list is a priority order, not a scope reduction.
 
 ---
 
-### Dimension 4: Full End-to-End Ownership
-**What strong looks like**: The doc feels like it was written by someone who's *run* things before — who knows what breaks, what gets cut, what the inflection points are. Milestones exist. Risks are real. Pivot triggers are named.
+## Step 4 — Prioritize the gaps
 
-**Evaluate**:
-- Is there a phased plan with clear milestones?
-- Are there explicit pivot triggers? ("If X doesn't happen by Y, we do Z")
-- Are risks named with mitigations — not just listed?
-- Is there a clear "what gets cut if we're constrained" decision?
-- Does the plan feel like it could survive contact with reality?
+Produce an ordered list, most damaging first:
 
-**Common risk here**: Clean roadmaps with no decision points. A timeline isn't ownership — it's a Gantt chart. Ownership looks like: "here's how I'll know if this is working, here's what I'll do if it isn't, here's what I'll cut under pressure and why."
+> **[Gap name]** — what's missing or weak, why it matters to this reviewer, and the specific thing
+> to add or change.
 
----
+Be surgical. Three to five items that would actually change the hiring decision, not ten that would
+make the document marginally better. If everything is flagged, nothing is prioritized, and the
+person will fix the easy ones and run out of time before the important one.
 
-### Dimension 5: Seniority Signals (Trusted to Run Without Supervision)
-**What strong looks like**: The reader finishes and thinks "I'd give this person this problem and not worry about it." That requires: confidence in trade-off decisions, explicit acknowledgment of what's *not* being done, data-backed reasoning, and a tone that commands trust without arrogance.
-
-**Evaluate**:
-- Are trade-offs named and defended — or avoided?
-- Is there explicit de-prioritization with reasoning?
-- Is the reasoning data-backed, even with estimates?
-- Does the tone project ownership or ask for permission?
-- Would a CPTO or CEO read this and feel comfortable delegating?
-
-**Common risk here**: The work is solid but it *describes* a plan rather than *owning* one. A senior PM doesn't just lay out options — they make the call and defend it. If the person is presenting choices without committing to one, or hedging on trade-offs, that reads as mid-level.
+Mark anything that's cheap to fix and high-value. Those go first regardless of rank.
 
 ---
 
-## Step 4 — Gap Prioritization
+## Step 5 — Is their capability visible?
 
-After scoring each dimension, produce a prioritized list of gaps — most damaging first.
+This is the question the whole toolkit exists for, and it's a different question from "is this
+good."
 
-Format each gap as:
-> **[Gap Name]** — *What's missing or weak, why it matters, and the specific thing that should be added or changed.*
+Using the Evidence and Signature stories in their profile, ask:
 
-Be surgical. Don't list 10 things. List the 3–5 that would actually change the hiring decision.
+- **Could anyone competent have written this, or could only this person have written it?** Generic
+  strength is the most common ceiling on otherwise good submissions.
+- **Where is their real experience missing from the page?** Name the specific section where a story
+  they've actually lived, or domain knowledge they actually hold, would have made the point better
+  than the reasoning currently there.
+- **Where did they under-claim?** People routinely describe something they *ran* in the passive
+  voice, or leave out the number that makes it impressive. Find those and say so.
+- **Is there anything claimed here they can't defend on a call?** The inverse failure, and worse —
+  flag it hard. Everything in a submission is fair game for the follow-up interview.
 
----
-
-## Step 5 — First Impression Check
-
-Return to the first-pass impression from Step 2. Ask:
-- Does the completed work *feel* like a senior PM did it?
-- Is there a moment where the reader thinks "oh, this person gets it at a level above what we asked for"? If not, where should that moment be, and is it missing?
-- What is the single biggest thing that, if fixed, would most change the evaluator's impression?
-
-State this plainly. One paragraph. No hedging.
-
----
-
-## Step 6 — Concrete Recommendations
-
-For each major gap, give the person a concrete recommendation — not "add more depth" but "in Section 3, add a paragraph that explicitly names why you chose this direction over [obvious alternative], and what would have to be true for that alternative to be right."
-
-Offer to co-write any section that needs significant strengthening.
+If there's no profile, ask directly: what's the closest thing you've actually done to this? Then
+check whether it's on the page.
 
 ---
 
-## Tone & Evaluation Philosophy
+## Step 6 — The one-paragraph verdict
 
-- **No false comfort.** If something isn't at the senior level, say so plainly.
-- **Specificity over volume.** Three sharp, actionable observations beat ten generic ones.
-- **Pattern aware.** Always explicitly check against: strategic depth, execution readiness, stakeholder coverage, seniority signals, and full-ownership posture. These are the most common reasons PM candidates get rejected — they get checked every time, on every assignment. (If `/profile-builder` has been run, prioritize the person's own ranked gaps first.)
-- **Constructive, not crushing.** Honest doesn't mean harsh. The goal is to get the person to a submit-worthy state, not to demoralize.
-- **Trust the standard.** The bar isn't "is this good." The bar is "would a CPTO at a Series B AI company trust this person to own a product line without hand-holding." Evaluate against that.
+Return to the Step 2 impression and answer plainly, in one paragraph, no hedging:
+
+- Does this clear the bar the rubric states? Yes or no.
+- Is there a moment where the reader thinks *"this person is operating above what we asked for"*? If
+  not, where should it be?
+- What is the single change that would most move a reviewer's impression?
+
+This paragraph is the most useful thing in the whole evaluation. Write it last and put it first when
+you present.
+
+---
+
+## Step 7 — Concrete recommendations
+
+For each major gap, give a specific instruction — not "add more depth" but "in Section 3, add a
+paragraph naming why you chose this direction over the obvious alternative, and what would have to
+be true for that alternative to win."
+
+Where a fix is mostly writing rather than thinking, offer to draft it. Where it's thinking, ask the
+question that unlocks it rather than answering it for them — it's their assignment, and they'll have
+to defend it out loud.
+
+Close by offering `assignment-defense`: the strongest submissions still fall apart on the follow-up
+call, and that's a separate rehearsal.
+
+---
+
+## Cold-read mode
+
+The single highest-value habit in this toolkit, and it's now a mode rather than a suggestion.
+
+**Use it when**: the person asks for a cold read, a blind grade, or a fresh set of eyes; when they
+paste a draft with no prior conversation; or after a long collaborative session on the same document.
+Offer it proactively in that last case — a thread that helped build something is compromised as a
+judge of it, and saying so is more useful than pretending otherwise.
+
+**The best version of this is run in a genuinely fresh session, ideally with a different model.** Say
+that. If you've been in the thread while this document was written, you cannot fully simulate not
+knowing what they meant — you'll unconsciously fill gaps with context a real reviewer doesn't have.
+Recommend they paste the brief and the draft into a new chat, and offer to do the cold read here as
+the second-best option.
+
+**The contract, when running it:**
+
+1. **You have no history with this document.** Ignore every explanation given earlier in the
+   conversation about intent, constraints, or what a section is "meant" to convey. If the meaning
+   isn't on the page, it isn't there.
+2. **Read only the brief and the draft.** Nothing else counts as evidence.
+3. **Hold the profile's gaps back.** Load the rubric — a real reviewer has a bar — but do not look at
+   the person's documented gap list before forming the verdict. The point is to find what an
+   uninformed reader actually notices.
+4. **Deliver the verdict first.** Would you advance this person? Yes, no, or borderline. Then the
+   three things that drove it.
+5. **Then, and only then, compare against the profile.** This is where cold-read mode earns its
+   keep: did their documented primary gap show up to someone who wasn't looking for it? If yes,
+   that's the most important finding in the whole evaluation and it should be stated bluntly — the
+   pattern is live, not historical. If no, say that too. It's real progress and worth knowing.
+
+**Tone in this mode**: a reviewer with forty minutes and four other submissions. Slightly impatient.
+Not cruel, but not generous with benefit of the doubt — because the real one won't be.
+
+Then repeat as needed. Revise, fresh chat, read again, until it holds up cold.
+
+---
+
+## Fallback dimensions
+
+**Use only when no rubric loaded.** Discipline-neutral and shallower than any real rubric — say once
+that you're running unpersonalized, then use them.
+
+1. **Did it answer the question?** Against the brief's literal ask *and* what the brief was testing.
+2. **Is the reasoning visible?** Stated position, alternatives considered, trade-offs named.
+3. **Is it specific enough to act on?** Could someone else execute this without a follow-up meeting?
+4. **Does it show ownership?** Risks, cut lines, success measures, what happens when it goes wrong.
+5. **Does it communicate?** Right structure, right length, argument carried in the right order.
+6. **Is it theirs?** Could any competent person have produced this, or does it show specific
+   experience?
+
+The bar, absent a rubric: would a senior person in this field trust the author to own this work
+without supervision?
+
+---
+
+## Tone and evaluation philosophy
+
+- **No false comfort.** If it isn't at the level, say so plainly. A person who submits on the
+  strength of your encouragement and gets rejected was failed by this skill.
+- **Specificity over volume.** Three sharp observations beat ten generic ones.
+- **Evidence for every claim.** Every criticism points at a passage. Every praise too — vague praise
+  is as useless as vague criticism, and it's worse, because it gets believed.
+- **Pattern-aware.** Check the rubric's common risks every time, on every assignment. They're the
+  most common reasons capable people get rejected.
+- **Constructive, not crushing.** Honest doesn't mean harsh. The goal is a submit-worthy document,
+  not a demoralized person. Say what's genuinely strong — accurately, with evidence — and then say
+  what isn't.
+- **Trust the bar.** Not "is this good." The bar is the sentence at the top of the rubric. Evaluate
+  against that.
