@@ -1,63 +1,150 @@
-# interview-toolkit
+# Interview Toolkit
 
-A set of Claude skills for thinking through interview take-home assignments — not as a candidate being evaluated, but as a professional demonstrating a skillset you already have.
+**[interview-toolkit website →](https://amirklein.github.io/interview-toolkit/)**
 
-Job searching is hard. Whether you've been laid off, are exploring a new role by choice, or just got back in the market, there's a lot of pressure to show your best thinking in a short window of time — usually a take-home assignment with one shot to get it right. These skills are the system I built for myself to do that more deliberately: a thought partner that pushes back instead of just agreeing, a framework for attacking a brief, an honest evaluator before you submit, and a way to turn a finished idea into a prototype.
+Six agent skills for take-home assignments and interview exercises.
 
-They're shared here as-is, generalized so anyone can use them, with a way to calibrate them to your own specific gaps.
+If you're in a process right now, the problem usually isn't that you can't do the work. It's that a
+brief, a deadline, and nobody to argue with produce something thinner than you actually are. These
+skills exist to close that gap: to make the assignment reflect the skillset you already have, and
+then push it to the strongest version of itself.
 
-## What's in here
+They're built on the open [Agent Skills](https://agentskills.io) format — a plain `SKILL.md` per
+folder — and work in Claude Code, Cursor, and Codex. Nothing to sign up for. Everything personal
+stays in `~/.interview-toolkit` on your machine.
 
-- **`/profile-builder`** — Run this first. It's a short questionnaire that asks about the actual feedback you've gotten, what's cost you the most, and how you tend to respond to pushback — then calibrates the four skills above to your specific patterns instead of generic advice.
-- **`/thought-partner`** — Loop this in from the start. Share the assignment and talk through your thinking out loud. It's built to push back, notice what's being glossed over, and know when to develop an idea vs. when to challenge it — not to hand you answers.
-- **`/assignment-framing`** — Once you have a rough sense of direction, use this to structure the actual attack plan: what's really being evaluated, what a strong answer covers, and where the common traps are.
-- **`/assignment-evaluator`** — Once you've got a draft, use this for honest, specific feedback before you submit. Not cheerleading — a real read on what's missing.
-- **`/prototype-builder`** — If the assignment calls for a mockup or interactive demo, this researches the actual product first, then builds a prototype that matches real UI patterns with your new feature layered on top.
+## The skills
 
-## Getting started
+| Skill | When | What it does |
+| --- | --- | --- |
+| `/profile-builder` | First, once | A ten-minute interview covering what you've actually done and where your skill isn't visible on paper yet. Writes `~/.interview-toolkit/profile.md`, which everything else reads. |
+| `/assignment-framing` | When the brief lands | Reads the brief, researches the company and domain live, names what's really being evaluated, allocates depth against your actual hours, and builds the attack plan. |
+| `/thought-partner` | Throughout | The colleague who won't let you gloss. Pushes when the thinking is thin, develops it when it's good, and tells you when your own experience belongs on the page and isn't there. |
+| `/prototype-builder` | If a mockup is asked for | Researches the real product first, then builds a prototype that looks like it belongs inside it, plus the narrative you'll present it with. |
+| `/assignment-evaluator` | Before you submit | An honest read against the bar for your field. Includes a cold-read mode that forgets the conversation and grades it like a stranger would. |
+| `/assignment-defense` | Before the follow-up call | A mock panel. Hiring manager, skeptical peer, and the person whose territory this steps on — pressing twice, because a rehearsal easier than the real thing costs you. |
 
-These are built using the open [Agent Skills](https://agentskills.io) format — a plain `SKILL.md` file (plus optional reference files) per skill folder. Both Claude Code and Cursor (2.4+) read this same format natively, just from different folders.
+You don't need all six. Most assignments use framing, thought-partner, and evaluator.
 
-**Important:** cloning this repo only puts the files on disk in that folder — it does not install them anywhere. Claude Code and Cursor look for skills in specific directories (`~/.claude/skills/`, `~/.cursor/skills/`, etc.), so there's always one extra step after cloning to actually copy the skills there.
+## Install
 
-### Quick install (recommended)
+```bash
+curl -fsSL https://raw.githubusercontent.com/amirklein/interview-toolkit/main/install.sh | bash
+```
 
-Open Cursor Agent or Claude Code and simply ask it to install the skills from this GitHub repo (you can simply copy and paste this prompt):
+Or from a clone, if you'd rather read it first:
 
-_Install these skills: https://github.com/amirklein/interview-toolkit_
+```bash
+git clone https://github.com/amirklein/interview-toolkit
+cd interview-toolkit
+./install.sh
+```
 
-### Manual install
+The installer finds whichever tools you have — Claude Code, Cursor, Codex — copies the skills into
+their skills directories, and seeds your rubrics. It never overwrites a rubric you've edited.
 
-**Claude.ai or Claude Desktop:**
-1. Clone this repo or download it as a zip
-2. Go to **Settings > Capabilities** and turn on Code execution and file creation (skills require this)
-3. Go to **Customize > Skills** and upload each skill folder
-4. Run `/profile-builder` first
+```bash
+./install.sh                          # interactive
+./install.sh -y                       # install to whatever is detected
+./install.sh -t cursor,codex -y       # specific tools, no prompts
+./install.sh -p                       # into this project, not your home directory
+./install.sh --update                 # pull and reinstall; your profile survives
+./install.sh --uninstall              # remove the skills, keep your profile
+```
+
+**Cloning alone doesn't install anything.** Agents look for skills in specific directories
+(`~/.claude/skills`, `~/.cursor/skills`, `~/.codex/skills`), so there's always one step after
+cloning to put them there. That's all `install.sh` does.
 
 ### After installing
 
-Restart Claude Code or Cursor — a full restart, not just a new chat, the first time you add a skills directory. Type `/` to confirm all five skills show up, then run `/profile-builder` first.
+1. **Restart your editor or agent** — a full restart, not just a new chat, the first time you add a
+   skills directory. Type `/` to confirm the six skills are listed.
+2. **Run `/profile-builder`.** The other skills work without it, falling back to general guidance.
+   They get considerably sharper once they know your patterns.
 
-If a skill doesn't appear: double-check the `SKILL.md` file landed directly inside its named folder (e.g. `~/.cursor/skills/profile-builder/SKILL.md`), not nested one extra level deep — that's the most common cause.
+If a skill doesn't appear, check that `SKILL.md` landed directly inside its named folder
+(`~/.cursor/skills/profile-builder/SKILL.md`) rather than one level deeper. That's the usual cause.
 
-**A note on git:** `/profile-builder` edits these `SKILL.md` files locally to personalize them to you. It's instructed not to commit or push those changes — but if you installed the skills *inside* a git-tracked clone of this repo (rather than to `~/.cursor/skills` or `~/.claude/skills`), your IDE/agent may still prompt you to commit the edits, since that's standard editor behavior, not something a skill's instructions can always override. `install.sh` prints an optional command (`git update-index --skip-worktree`) you can run to stop git from tracking changes to those specific files, so your personalization never accidentally gets staged or pushed.
+### Claude.ai and Claude Desktop
 
-Once `/profile-builder` has run, the other four skills will have your specific gaps written into their "watchlist" sections. Re-run it any time your feedback or target role changes.
+No filesystem, so it's manual:
 
-The four skills work fine without running the questionnaire first — they fall back to general, senior-PM-calibrated guidance. They just get sharper once they know your actual patterns.
+1. Download the repo as a zip, or clone it
+2. Settings → Capabilities, turn on code execution and file creation
+3. Customize → Skills, upload each skill folder
+4. Run `/profile-builder`. It can't write your profile there, so it'll output it in the chat — save
+   it and paste it in when you start a session with the other skills.
 
-## A workflow that's helped me
+## Making it yours
 
-Beyond the skills themselves, one habit that's made a real difference: once you have a completed draft, open a **fresh chat** — even a different model (Claude, ChatGPT, Gemini) — paste in your draft along with the role you're applying for, and ask it to grade it and poke holes with no context on how you got there. A clean read from a model that hasn't been "in it" with you the whole time catches things a long collaborative thread won't. Take that feedback, revise, and repeat with new chats until it holds up.
+Everything personal lives in `~/.interview-toolkit`, outside the repo. Nothing there is tracked by
+git, sent anywhere, or touched by an update.
 
-## A note on [Familiar](https://github.com/familiar-software/familiar)
+```
+~/.interview-toolkit/
+├── profile.md          # written by /profile-builder — yours
+└── rubrics/
+    ├── product.md      # the standard your work is held to — edit freely
+    ├── design.md
+    ├── engineering.md
+    ├── sales.md
+    ├── support.md
+    └── _template.md    # copy this to add a discipline
+```
 
-If you want to go a step further, [Familiar](https://github.com/familiar-software/familiar) is an open-source tool (by Tal Raviv and Max) that captures your screen every few seconds into markdown your AI agent can read as context. I use it as a pulse check — daily, weekly, whenever — asking Claude to look at how I've actually been spending my time during the job search and flag the areas I'm clearly struggling with or neglecting. Full credit to them; check out their repo for setup.
+**`profile.md`** has two halves, and both matter. The gaps tell the skills what to check hardest.
+The evidence — your domains, what you've shipped, the two or three stories you can tell with real
+numbers — is what lets them say *"this section should be the migration you actually ran, not a
+generic risk list."* A toolkit that only knows your weaknesses can help you write a competent
+answer. It can't help you write yours.
 
-## Why this exists
+**Rubrics** define the bar, the dimensions your work is judged on, what a strong response contains,
+and who's in the room when you defend it. `assignment-framing`, `assignment-evaluator`, and
+`assignment-defense` all read the one matching your discipline.
 
-None of this replaces actually doing the thinking. The point isn't to have AI write your assignment — it's to have something in the room that won't just agree with you, that knows where these assignments tend to go wrong, and that can give you an honest read before a real reviewer does. You already have the skillset. This is just trying to make sure it's visible on the page.
+Editing them is the intended way to use this, not an advanced feature:
+
+- **Change the bar** to the one you're actually held to. It's the first line, and every judgment
+  runs through it.
+- **Delete a dimension** nobody grades you on.
+- **Replace the panel** with the names of the people who'll really be on your call. This single
+  change makes `/assignment-defense` dramatically more useful.
+
+**Adding a discipline** is one file: copy `_template.md`, fill it in, and set `Discipline:` in your
+profile to match.
+
+Only `product.md` is calibrated from real interview and assignment feedback. Design, engineering,
+sales, and support ship as honest starting points and say so — useful to react to and correct, not
+authoritative. The fastest way to make one real is to run an assignment through it and fix what it
+got wrong. Pull requests welcome if you do.
+
+## A habit worth keeping
+
+Once you have a complete draft, open a **fresh chat** — ideally a different model — paste in the
+brief and the draft with no context on how you got there, and ask for a grade and for holes.
+
+A clean read from something that hasn't been in it with you catches what a long collaborative thread
+never will. `/assignment-evaluator` has this as its cold-read mode, including the part that matters
+most: after the blind verdict, it checks whether your own documented gap showed up to a reader who
+wasn't looking for it. Revise, new chat, read again, until it holds up cold.
+
+## What this won't do
+
+It won't write your assignment. You'd have to defend it on a call, and you'd lose — which is why
+`/assignment-evaluator` hunts for anything you can't back up and `/assignment-defense` makes you say
+it out loud under pressure.
+
+It won't tell you your draft is great. Every other chat window will do that for free.
+
+And it doesn't replace doing the thinking. The point is to have something in the room that won't
+just agree with you, that knows where these assignments go wrong, and that gives you an honest read
+before a real reviewer does.
 
 ## Feedback
 
-These skills are a living thing — if you tweak them, find gaps, or have ideas for improvement, open an issue or a PR. Also happy to hear from you directly if you use these for your own search.
+These are a living thing. If you tweak them, find gaps, sharpen an uncalibrated rubric, or have
+ideas, open an issue or a PR. Also happy to hear from you directly if you use them for your own
+search — including if they didn't help.
+
+MIT licensed. Use it, fork it, make it yours.

@@ -1,110 +1,259 @@
 ---
 name: profile-builder
 description: >
-  Use this skill when a person wants to personalize their interview-prep toolkit (thought-partner, assignment-framing, assignment-evaluator, prototype-builder) to their own specific gaps, instead of using the generic or default versions. Triggers include requests to personalize their skills, set up their profile, calibrate these to them, or any first-time setup of the toolkit after cloning the repo. Also trigger if someone wants to redo or update their profile after getting new feedback. This skill runs a short branching questionnaire (by discipline - product, design, engineering, sales, support) and then edits specific placeholder sections in the other four skill files. It does NOT rewrite the skills wholesale, only the named Watchlist and trap/risk callouts.
+  Use this skill to set up or update someone's interview-toolkit profile — the file the other
+  skills (thought-partner, assignment-framing, assignment-evaluator, assignment-defense,
+  prototype-builder) read to calibrate to this specific person instead of running generic.
+  Triggers include requests to set up the toolkit, personalize or calibrate these skills, build
+  my profile, first-time setup after installing the toolkit, or wanting to redo the profile after
+  new feedback or a change of target role. This skill runs a short branching interview by
+  discipline (product, design, engineering, sales, support) covering both what the person has
+  actually done and where their skill isn't yet visible on paper, then writes a single file at
+  ~/.interview-toolkit/profile.md. It does not edit any skill files.
 ---
 
 # Profile Builder
 
-A diagnostic questionnaire that personalizes the interview-prep toolkit (`thought-partner`, `assignment-framing`, `assignment-evaluator`, `prototype-builder`) to the specific person using it — without requiring them to already know how to write a good self-assessment.
+A short interview that calibrates the interview toolkit to one specific person, and writes the
+result to `~/.interview-toolkit/profile.md`. Every other skill in the toolkit reads that file.
+
+Takes about five to ten minutes. Run it once, re-run it when the person's target role or
+feedback changes.
 
 ## Core principle
 
-**The person using this skill is not a "candidate" — they are a professional with a real skillset, who is demonstrating it in an interview context.** Every question, every synthesized profile, and every piece of inserted text should reflect that framing. The goal is not to find what's wrong with them; it's to find where their existing skill isn't yet *visible* on paper, so it can be made visible.
+**The person using this skill is not a "candidate." They are a professional with a real
+skillset, who is demonstrating it under artificial conditions.** Every question, and every line
+you write into the profile, should reflect that.
+
+The goal is not to find what's wrong with them. It is to find two things:
+
+1. **What they've actually done** — so the toolkit can push their real experience onto the page
+   instead of helping them write competent, anonymous work.
+2. **Where their existing skill isn't visible yet** — so the toolkit knows what to check before
+   a real reviewer does.
+
+Half of this interview is the first thing. That half is not optional, and it comes first — the
+frame matters. Someone who has just been laid off does not need to open with twenty minutes on
+their deficiencies.
 
 ## What this skill does NOT do
 
-- It does not rewrite the four target skills wholesale.
-- It does not touch the methodology sections (research steps, dimension frameworks, structure, tone guidance) — those are discipline-tested and not personal.
-- It does not insert anything vaguer than what's already in the generic placeholder. If the questionnaire output isn't more specific than the default, leave the default alone.
+- **It does not edit skill files.** Everything it produces goes into one file:
+  `~/.interview-toolkit/profile.md`. Earlier versions of this toolkit rewrote sections inside
+  each `SKILL.md`, which broke on every update and fought with git. Don't do that.
+- It does not invent evidence. Everything in the Evidence and Signature stories sections comes
+  from the person's own answers. If they didn't say it, it doesn't go in.
+- It does not write anything vaguer than the rubric already checks. If an answer isn't more
+  specific than "watch for hedging," leave it out — a vague profile is worse than none, because
+  it displaces the general checks with noise.
 
 ## A note on how to ask
 
-**Use your environment's native structured-question / multiple-choice UI tool for every question in this flow, not plain text.** Most agent environments that support this skill format (Cursor, Claude Code, Claude.ai/Desktop) have a dedicated tool for presenting selectable options to the user — sometimes called an "ask questions" tool, a form/UI tool, or similar — rather than just typing the question as a chat message. If such a tool is available to you, use it for every question below, including the multi-select gap questions, the ranking step, and the free-text invites (most of these tools support an open-text option alongside the choices). Only fall back to plain text questions if no such tool exists in your current environment. Defaulting to plain text when a structured tool is available makes the questionnaire slower and more error-prone for the person answering — this defeats much of the point of building it as a skill in the first place.
+**Use your environment's native structured-question UI for every question in this flow, not
+plain chat text.** Most environments that support this skill format (Cursor, Claude Code,
+Claude.ai/Desktop, Codex) have a dedicated tool for presenting selectable options — an "ask
+question" tool, a form tool, or similar. Use it for every question below: the multi-selects, the
+ranking step, and the free-text invites (most such tools support an open-text option alongside
+the choices).
 
-## The flow
+Only fall back to plain text if no such tool exists in your environment. Typing questions as
+chat messages when a picker is available makes this slower and more error-prone to answer,
+which defeats much of the point of building it as a skill.
 
-### Step 1: Discipline select (single-select, no free text needed here)
+The one exception: the two fully open-ended invites (Step 4 and Step 8) are often more natural
+as plain text even when a UI tool exists. Use judgment.
 
-Ask, using your native question UI if available: "What's your discipline?"
+---
+
+## Step 1 — Discipline
+
+Ask: "What's your discipline?" Single-select.
+
 - Product
 - Design
 - Engineering
 - Sales
 - Support / Customer Success
-- Something else (free text — if this comes up, do your best to map their answer to the closest existing branch's *structure*, and flag honestly that this branch isn't pre-built)
+- Something else — I'll describe it
 
-This determines which gap-option set loads next. See `references/discipline-branches.md` for the full option sets per discipline.
+This determines which gap options load in Step 5, and which rubric the rest of the toolkit will
+use. See `references/discipline-branches.md` for the option sets.
 
-### Step 2: Level + context (within the selected branch)
+If they pick "something else," map their answer to the closest existing branch's *structure*,
+and say plainly that this branch isn't pre-built — then offer that they can write their own
+rubric at `~/.interview-toolkit/rubrics/<discipline>.md` using the `_template.md` in that
+folder as the shape.
 
-Ask, using your native question UI, 1-2 questions calibrated to that discipline about seniority target and the type of environment they operate in (e.g. for Product: B2B/B2C/mixed; for Sales: SMB/enterprise; for Design: in-house/agency, etc.). Keep this short — it's context, not the diagnostic itself.
+## Step 2 — Level and context
 
-### Step 3: Gap identification (multi-select + free text, ALWAYS)
+One or two short questions, calibrated to the discipline, about the seniority they're targeting
+and the kind of environment they work in (Product: B2B/B2C/mixed; Sales: SMB/enterprise; Design:
+in-house/agency; and so on).
+
+Keep this fast. It's context, not diagnosis.
+
+## Step 3 — Evidence: what they've actually done
+
+**Do not skip this and do not rush it.** This is the half of the profile that makes the
+difference between the toolkit helping someone write a good generic answer and helping them
+write an answer only they could have written.
+
+Ask, using your question UI where the options help and free text where they don't:
+
+**3a — Domains they know cold.** "What subject areas do you know well enough that you'd catch
+something a smart outsider would miss?" Offer a few discipline-plausible examples as options to
+react to, always with free text. You're looking for specifics — "usage-based billing," not
+"SaaS."
+
+**3b — What they've shipped or owned.** "What are the two or three things you've actually
+shipped or owned end to end?" Free text, and follow up for scale: how long, how many people,
+what changed as a result. Numbers matter here — they're what make the story usable later.
+
+**3c — Scale and shape of environment.** Company size, team size, book of business, whatever's
+the relevant unit for their discipline. One question.
+
+**3d — The unfair advantage.** "Is there anything in your background that most people competing
+for the same role won't have?" This is often the single most useful answer in the whole
+interview — someone who did five years in ops before moving into product reads a workflow brief
+differently, and that should show up in their assignments. Free text, and follow up on it.
+
+### Signature stories
+
+From 3b, pick the two or three strongest and pin down what each one *proves*. Ask directly:
+"What does that story demonstrate about how you work?"
+
+This mapping is the point. A story is only useful in an assignment if it's attached to a claim.
+"Cut quote-to-close from 11 days to 2" is a fact; "proves you find revenue in workflow friction
+nobody else looks at" is the reason to include it.
+
+## Step 4 — Free-text invite on evidence
+
+Before moving to gaps, one open question:
+
+> "Anything you're proud of that the questions above didn't give you room to say?"
+
+People routinely surface their best material here, because the structured questions were about
+categories and this one is about them.
+
+---
+
+## Step 5 — Gap identification
+
+Now the other half. Frame the turn explicitly — something like: "Now the less fun half. Not
+what you're bad at: where what you're already good at doesn't make it onto the page."
 
 Every gap question must:
-- Offer 4 discipline-relevant options (see references file)
-- Always include a final option: "Something else — I'll describe it"
+
+- Offer 4 discipline-relevant options (see `references/discipline-branches.md`)
+- Always include a final "Something else — I'll describe it"
 - Accept multiple selections
 
-**Critical rule:** Free text is not a side option to be glossed over. If someone writes a free-text answer, you MUST follow up on it with a targeted question before moving on. Never let a free-text answer pass without engaging it.
+**Critical rule:** free text is not a side option to skim past. If someone writes a free-text
+answer, you MUST follow up on it with a targeted question before moving on. That's where the
+usable detail lives.
 
-Universal free-text follow-up template (use when you don't have discipline-specific texture to follow up with):
-> "What did that look like the last time it happened? What was the actual feedback, in their words if you remember it?"
+Universal free-text follow-up, when you have no discipline-specific texture to work with:
 
-For the Product branch specifically, you have richer real-world calibration available (see `references/product-branch.md`) — use the sharper, more specific follow-ups documented there rather than the generic template.
+> "What did that look like the last time it happened? What was the actual feedback, in their
+> words if you remember them?"
 
-### Step 4: Follow-up on each selected gap (multi-select + free text, ALWAYS)
+For the Product branch you have richer calibration available — use the sharper follow-ups in
+`references/product-branch.md` rather than the generic template.
 
-For every gap they selected in Step 3, ask one follow-up using your native question UI, breaking it into more specific flavors. Same rule: multi-select, always include free text, always follow up on free text.
+## Step 6 — Follow up on each selected gap
 
-### Step 5: Forced ranking (single-select — NEVER multi-select)
+For every gap selected in Step 5, ask one follow-up that breaks it into more specific flavors.
+Same rules: multi-select, always a free-text option, always engage the free text.
 
-This is the most important mechanical rule in this entire skill: **the ranking step must be single-select.** Its entire purpose is to force prioritization. If someone could select multiple "top" gaps, the exercise produces a list, not a profile, and the personalization downstream will be unfocused.
+## Step 7 — Forced ranking
 
-Ask, using your native question UI: "Of these, which has cost you the most — the one you'd fix first if you could only fix one?"
+**This step must be single-select.** It is the most important mechanical rule in this skill.
 
-### Step 6: Final free-text invite on the ranked gap
+Its entire purpose is to force prioritization. If someone can pick multiple "top" gaps, the
+exercise produces a list instead of a profile, and everything downstream is unfocused.
 
-After they rank, ask one more open question specifically about the #1 gap, using your native question UI's free-text option if it has one, or plain text if not (open-ended questions are the one case where plain text is often the more natural choice even when a UI tool exists):
-> "Is there anything about how [ranked gap] shows up for you specifically that the questions above didn't quite capture?"
+Ask: "Of these, which has cost you the most — the one you'd fix first if you could only fix
+one?" List exactly the gaps they selected in Step 5, not the sub-flavors.
 
-This is where the sharpest, most usable detail tends to surface (e.g., "my developers and designers are missing practical steps to take into action in sprints" — a concrete, falsifiable bar that's far more useful than "needs more execution depth").
+## Step 8 — Free-text invite on the ranked gap
 
-### Step 7 (optional but valuable): Behavioral pattern under pushback
+> "Is there anything about how [ranked gap] shows up for you specifically that the questions
+> above didn't quite capture?"
 
-Ask, using your native question UI, how they tend to respond when someone pushes back on their thinking — in live conversation specifically, not just in writing. This one question can produce an instruction that changes *how Claude itself should behave* in the `thought-partner` skill (e.g., "push back at least twice before treating agreement as resolution" for someone who tends to cave under live pressure). This is a different and often more valuable kind of personalization than anything about document content.
+This is where the sharpest material tends to surface. A strong answer sounds like *"my
+developers and designers can't pull practical actions out of what I hand them"* — a concrete,
+falsifiable bar, far more useful than "needs more execution depth." When you get one, the
+profile should use their bar in their words.
 
-Don't force this question if the flow already feels long — use judgment. But if it comes up naturally or the person seems rushed through earlier questions, it's worth asking explicitly.
+## Step 9 — Behavioral pattern under pushback
 
-## Synthesizing the profile
+Ask how they tend to respond when someone pushes back on their thinking — in live conversation
+specifically, not just in writing.
 
-Once the questionnaire is complete, write a short synthesized profile with this structure:
+This one question can produce an instruction that changes how the agent itself behaves in
+`thought-partner` and `assignment-defense` (for example: "push back at least twice before
+treating agreement as resolution"). That's a different and often more valuable kind of
+personalization than anything about document content, because it changes the conversation the
+person is having right now.
 
-```
-Primary gap (ranked #1): [specific, falsifiable description — not "needs more X" but "outputs don't translate into Y"]
-Secondary gap(s): [list, with the specific flavor from follow-ups]
-Behavioral pattern (if surfaced): [how they respond to live pushback, and what that means for how the thought-partner skill should act]
-```
+Don't force it if the flow already feels long. But if they seemed to rush earlier questions,
+it's worth asking.
 
-**Test before inserting:** for each piece of this profile, ask — is this more specific than what's already in the generic skill's placeholder section? If not, don't insert it. A profile that just says "watch for hedging" isn't worth inserting over a generic Watchlist that already says that.
+---
 
-**Do not delete unflagged dimensions.** The generic skill's placeholder sections typically cover several dimensions (e.g., strategic depth, stakeholder coverage, execution, ownership, seniority signals). A given questionnaire run will usually surface only some of these as active concerns — that doesn't mean the others are irrelevant for this person, only that they weren't top-of-mind in this run. Keep every dimension the generic version covers; sharpen the ones the questionnaire flagged with the person's specific language, and keep the rest as a baseline general check (you can note explicitly that it wasn't flagged as a top concern this round). Shrinking the skill's coverage based on one incomplete questionnaire run is a regression, not a personalization.
+## Writing the profile
 
-## Applying the profile to the four skills
+Read `references/profile-template.md` for the exact format and the rules for writing it. Then
+write the file:
 
-**Do not commit or push these changes to git, and do not ask to.** This is a local personalization step — the edited skill files should exist only on the person's machine, not in version control or any shared/main branch. If your environment (e.g. Cursor, Claude Code) prompts you to stage, commit, or push after editing files, decline that prompt and proceed with local file edits only. If asked, tell the person these are personal, local-only edits and they can choose to manage them in git themselves if they want — but you should never initiate or suggest a commit as part of this skill.
+1. **Create `~/.interview-toolkit/` if it doesn't exist.**
+2. **Write `~/.interview-toolkit/profile.md`** following the template.
+3. **Show the person the full file** before or immediately after writing it, and offer to adjust
+   anything. Never write it silently — this is a document about them, and they should recognize
+   themselves in it.
+4. **Confirm the discipline rubric exists** at `~/.interview-toolkit/rubrics/<discipline>.md`.
+   If it's missing (they installed by hand, or picked a discipline with no rubric), say so and
+   offer to create one from `_template.md` in that folder.
 
-Each of the four target skills has named placeholder sections (typically called "Watchlist," "[Name]'s trap," or "[Name]'s specific risk here" in the original). Your job:
+If your environment has no filesystem access — for example, skills uploaded to Claude.ai — you
+can't write the file. Say so plainly, output the full profile in the chat, and tell them to save
+it as `~/.interview-toolkit/profile.md` themselves, or to paste it at the start of sessions with
+the other skills.
 
-1. Open each target skill file
-2. Locate the named placeholder sections only — do not touch methodology, structure, dimension frameworks, or tone guidance
-3. Replace the placeholder content with the synthesized profile, written in the second person ("you tend to...", not "the user tends to...")
-4. If the behavioral pattern from Step 7 was surfaced, add a short explicit instruction to `thought-partner`'s operating instructions (not just the Watchlist) — e.g., "If [person] agrees with your pushback quickly, push back at least once more before treating the agreement as resolved."
-5. Show the person a before/after diff of what changed in each file before finalizing — don't silently overwrite.
+### Rules for what goes in
 
-**Watch for broken pronoun grammar.** If you do any bulk find/replace of a name (e.g. swapping a placeholder name for the actual person's name, or genericizing to "[Person]"), pronouns elsewhere in the sentence (he/him/his, she/her/hers, they/them) often don't match anymore. Don't trust a global substitution — read every sentence that was touched and fix grammar by hand. This is a real failure mode that's easy to miss on a skim.
+**Specific and falsifiable, or leave it out.** The test for every line: could you run this
+against a draft and get a yes or no? "Needs more depth" fails. "An engineer can't pull three
+sprint tickets from this section" passes.
 
-## Re-running this skill
+**Use their words.** When someone gives you a sharp phrase for their own pattern, keep it
+verbatim. Your restatement will be blander than what they said.
 
-If someone wants to update their profile (new feedback, new role target, etc.), re-run the full flow rather than patching incrementally. Overwrite the placeholder sections fresh rather than appending to old ones — stale personalization is worse than no personalization.
+**Don't drop the dimensions that didn't come up.** A single run surfaces what was top-of-mind,
+not the complete picture. List unflagged dimensions under "Not flagged this round" so the rubric
+still checks them at a baseline level. Narrowing the toolkit's coverage based on one incomplete
+interview is a regression, not a personalization.
+
+**Watch pronoun grammar.** If you do any find/replace on names or pronouns while drafting, read
+every touched sentence. Global substitutions leave broken grammar that's easy to miss on a skim.
+
+### This file is personal and local
+
+`~/.interview-toolkit/profile.md` lives outside the repo, so nothing about it touches version
+control. Don't offer to commit it, and don't copy it into the toolkit folder. If someone wants
+it backed up or synced, that's their call to make, not something this skill initiates.
+
+## Re-running
+
+Re-run the full flow rather than patching. Overwrite the file rather than appending — stale
+personalization is worse than none.
+
+Two shortcuts worth offering when someone re-runs:
+
+- **Evidence usually holds; gaps change.** If they ran this recently and only have new feedback,
+  offer to keep Steps 1–4 as-is and redo Steps 5–9.
+- **Multiple targets.** If they're interviewing for meaningfully different roles, they can keep
+  more than one profile — `profile.md` is what loads by default, and something like
+  `profile-growth.md` alongside it can be pointed at explicitly in a session. Mention this only
+  if it's relevant; it's a power-user path, not the default.

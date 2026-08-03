@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interview Toolkit — make the assignment show what you can actually do</title>
+<meta name="description" content="Six agent skills for take-home assignments and interview exercises. A thought partner that pushes back, an honest evaluator before you submit, and a mock panel for the follow-up call. Free, open source, runs on your machine.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Interview Toolkit">
+<meta property="og:description" content="You already have the skillset. This makes sure the assignment shows it. Six agent skills for take-home assignments, free and open source.">
+<meta property="og:url" content="https://amirklein.github.io/interview-toolkit/">
+<meta property="og:image" content="https://amirklein.github.io/interview-toolkit/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Interview Toolkit">
+<meta name="twitter:description" content="You already have the skillset. This makes sure the assignment shows it.">
+<meta name="twitter:image" content="https://amirklein.github.io/interview-toolkit/og.png">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<style>
+:root {
+  /* Fixed light palette. The transcripts are dark cards against it, which is
+     where the contrast and most of the personality come from. */
+  color-scheme: light;
+  --bg: #faf9f7;
+  --ink: #16151a;
+  --muted: #63616b;
+  --faint: #8d8b95;
+  --line: #e4e1dc;
+  --card: #ffffff;
+  --ink-deep: #14131a;
+  --ink-deep-2: #1d1c25;
+  --accent: #1f6feb;
+  --accent-ink: #0b4fc0;
+  --flag: #d6336c;
+  --good: #1a7f4b;
+  --shadow-sm: 0 1px 2px rgba(20,19,26,.06), 0 4px 14px rgba(20,19,26,.05);
+  --shadow: 0 2px 4px rgba(20,19,26,.06), 0 18px 50px rgba(20,19,26,.10);
+  --radius: 14px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--ink); }
+
+.wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.narrow { max-width: 760px; }
+
+h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 .5em; }
+h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); font-weight: 680; letter-spacing: -0.032em; }
+h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 640; }
+h3 { font-size: 1.06rem; font-weight: 640; }
+p { margin: 0 0 1.1em; }
+.lede { font-size: 1.16rem; color: var(--muted); }
+
+/* Inline code in prose. The .step and .code blocks style their own. */
+p code, li code, .lede code {
+  font: 500 .88em/1.4 var(--mono);
+  background: rgba(20,19,26,.055);
+  padding: 1px 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.eyebrow {
+  font: 600 .74rem/1 var(--sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 1.4em;
+}
+
+/* ---------------------------------------------------------------- header */
+
+header.top {
+  border-bottom: 1px solid var(--line);
+  background: rgba(250,249,247,.85);
+  backdrop-filter: saturate(160%) blur(8px);
+  position: sticky; top: 0; z-index: 20;
+}
+header.top .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 58px; gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 620; letter-spacing: -.01em; }
+.brand svg { display: block; }
+.top nav { display: flex; align-items: center; gap: 22px; font-size: .93rem; }
+.top nav a { color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--ink); }
+@media (max-width: 720px) { .top nav a.hide-sm { display: none; } }
+
+/* ---------------------------------------------------------------- hero */
+
+.hero { padding: 76px 0 60px; }
+.hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 56px; align-items: center; }
+@media (max-width: 900px) {
+  .hero { padding: 48px 0 40px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+h1 .dim {
+  color: var(--faint);
+  display: block;
+  font-size: .58em;
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  margin-top: .22em;
+}
+.hero .lede { max-width: 30em; }
+
+.cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 18px; border-radius: 10px;
+  font-weight: 600; font-size: .95rem; text-decoration: none;
+  border: 1px solid transparent; cursor: pointer;
+}
+.btn-primary { background: var(--ink-deep); color: #fff; }
+.btn-primary:hover { background: #2c2a36; color: #fff; }
+.btn-ghost { border-color: var(--line); color: var(--ink); background: var(--card); }
+.btn-ghost:hover { border-color: #c9c5be; color: var(--ink); }
+
+.trust { margin-top: 18px; font-size: .88rem; color: var(--faint); }
+.trust strong { color: var(--muted); font-weight: 600; }
+
+/* ---------------------------------------------------------------- chat cards */
+
+.chat {
+  background: var(--ink-deep);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  color: #e9e8ef;
+  font-size: .935rem;
+  line-height: 1.55;
+  overflow: hidden;
+}
+.chat-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 4px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  margin-bottom: 14px;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.18); }
+.chat-title {
+  margin-left: 6px; font: 600 .78rem/1 var(--mono);
+  letter-spacing: .04em; color: rgba(255,255,255,.5); text-transform: lowercase;
+}
+.turn { display: flex; gap: 11px; padding: 9px 4px; }
+.turn + .turn { border-top: 1px solid rgba(255,255,255,.055); }
+.who {
+  flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px;
+  display: grid; place-items: center;
+  font: 700 .66rem/1 var(--sans); letter-spacing: .02em;
+  margin-top: 2px;
+}
+.who-you { background: rgba(255,255,255,.1); color: rgba(255,255,255,.65); }
+.who-ai { background: var(--accent); color: #fff; }
+.turn p { margin: 0; }
+.turn p + p { margin-top: .6em; }
+.turn.you { color: rgba(233,232,239,.62); }
+.chat b { color: #fff; font-weight: 620; }
+.chat em { color: #ffd9e4; font-style: normal; border-bottom: 1px solid rgba(214,51,108,.6); }
+.chat .verdict {
+  display: inline-block; margin-bottom: .55em;
+  font: 700 .72rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+  padding: 5px 8px; border-radius: 6px;
+  background: rgba(214,51,108,.16); color: #ff9dbd;
+}
+.chat ul { margin: .4em 0 0; padding-left: 1.1em; }
+.chat li { margin-bottom: .38em; }
+.chat li::marker { color: rgba(255,255,255,.3); }
+.chat .aside {
+  margin-top: 12px; padding: 10px 12px;
+  border-radius: 9px; background: rgba(255,255,255,.055);
+  font-size: .87rem; color: rgba(233,232,239,.72);
+}
+
+/* ---------------------------------------------------------------- sections */
+
+section { padding: 66px 0; border-top: 1px solid var(--line); }
+section.plain { border-top: none; }
+.sec-head { max-width: 46em; margin-bottom: 38px; }
+.sec-head p:last-child { margin-bottom: 0; }
+
+.flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+@media (max-width: 900px) { .flow { grid-template-columns: 1fr; } }
+.step {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.step .num {
+  font: 700 .72rem/1 var(--mono); color: var(--faint);
+  letter-spacing: .08em; display: block; margin-bottom: 12px;
+}
+.step code {
+  font: 600 .84rem/1.4 var(--mono); color: var(--accent-ink);
+  background: rgba(31,111,235,.07); padding: 2px 6px; border-radius: 5px;
+}
+.step p { margin: 10px 0 0; font-size: .95rem; color: var(--muted); }
+.step p strong { color: var(--ink); font-weight: 620; }
+
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+@media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+
+.feature {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm);
+}
+.feature h3 { margin-bottom: .35em; }
+.feature p { margin: 0; color: var(--muted); font-size: .96rem; }
+.feature p + p { margin-top: .8em; }
+.feature .tag {
+  display: inline-block; margin-bottom: 12px;
+  font: 600 .7rem/1 var(--mono); letter-spacing: .07em; text-transform: uppercase;
+  color: var(--faint);
+}
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 32px; } }
+
+/* ---------------------------------------------------------------- code */
+
+.code {
+  position: relative;
+  background: var(--ink-deep-2); color: #e9e8ef;
+  border-radius: 11px; padding: 15px 17px;
+  margin: 0;
+  font: 500 .875rem/1.7 var(--mono);
+  /* Real pre semantics: a wrapped shell command is a wrong shell command.
+     Long lines scroll sideways, and the copy button hands over the exact text. */
+  white-space: pre;
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+.code.has-copy { padding-top: 40px; }
+.code .c { color: rgba(233,232,239,.45); }
+.code .p { color: #7fb2ff; user-select: none; }
+.copy {
+  position: absolute; top: 9px; right: 9px;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.7);
+  border: 0; border-radius: 6px; padding: 5px 9px;
+  font: 600 .72rem/1 var(--sans); cursor: pointer;
+}
+.copy:hover { background: rgba(255,255,255,.16); color: #fff; }
+
+.file {
+  background: var(--card); border: 1px solid var(--line); border-radius: 11px;
+  box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.file-name {
+  padding: 9px 14px; border-bottom: 1px solid var(--line);
+  font: 600 .76rem/1 var(--mono); color: var(--faint);
+}
+.file-body { padding: 15px; font: 500 .84rem/1.65 var(--mono); white-space: pre-wrap; color: var(--muted); }
+.file-body b { color: var(--ink); font-weight: 620; }
+
+/* ---------------------------------------------------------------- lists */
+
+ul.plain { list-style: none; padding: 0; margin: 0; }
+ul.plain li { padding-left: 26px; position: relative; margin-bottom: .8em; color: var(--muted); }
+ul.plain li::before {
+  content: ""; position: absolute; left: 6px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%; background: #cdc9c2;
+}
+ul.plain li strong { color: var(--ink); font-weight: 620; }
+ul.plain.no li::before { background: none; content: "✕"; left: 3px; top: 0; color: #cdc9c2; font-size: .8em; }
+ul.plain.yes li::before { background: none; content: "✓"; left: 2px; top: 0; color: var(--good); font-size: .86em; font-weight: 700; }
+
+.qa { border-top: 1px solid var(--line); padding: 22px 0 4px; }
+.qa:first-of-type { border-top: none; }
+.qa h3 { margin-bottom: .45em; }
+.qa p { color: var(--muted); margin-bottom: .9em; }
+.qa p:last-child { margin-bottom: 0; }
+
+/* ---------------------------------------------------------------- footer */
+
+footer {
+  border-top: 1px solid var(--line); padding: 40px 0 56px;
+  color: var(--faint); font-size: .92rem;
+}
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 26px; align-items: center; justify-content: space-between; }
+footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="brand">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="17" height="17" rx="4.5" fill="#16151a"/>
+        <path d="M5.4 10.6l2.6 2.6 6-6.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Interview Toolkit
+    </span>
+    <nav>
+      <a href="#how" class="hide-sm">How it works</a>
+      <a href="#yours" class="hide-sm">Make it yours</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/amirklein/interview-toolkit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>You already have<br>the skillset.<span class="dim">The assignment has to show it.</span></h1>
+      <p class="lede">
+        Six agent skills for take-home assignments and interview exercises. A thought partner
+        that argues with you, an honest read before you submit, and a mock panel for the call
+        after. Free, open source, and it runs wherever your agent already runs.
+      </p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#install">Install it</a>
+        <a class="btn btn-ghost" href="https://github.com/amirklein/interview-toolkit">View on GitHub</a>
+      </div>
+      <p class="trust">
+        <strong>Claude Code · Cursor · Codex.</strong>
+        Nothing to sign up for. Your profile stays on your machine.
+      </p>
+    </div>
+
+    <div class="chat">
+      <div class="chat-head">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="chat-title">thought-partner</span>
+      </div>
+      <div class="turn you">
+        <span class="who who-you">YOU</span>
+        <p>I think the answer is an AI assistant for their support team.</p>
+      </div>
+      <div class="turn">
+        <span class="who who-ai">AI</span>
+        <p>That's <em>a name, not a definition</em>. What goes in, what comes out, and what happens when it's wrong?</p>
+      </div>
+      <div class="turn you">
+        <span class="who who-you">YOU</span>
+        <p>Fair. It summarizes the ticket history and drafts a reply the agent can edit.</p>
+      </div>
+      <div class="turn">
+        <span class="who who-ai">AI</span>
+        <div>
+          <p>Better. Now the harder one: you've written this for the support rep, and <b>in B2B the rep doesn't sign the contract</b>. Who approves the budget, and what do they lose if this drafts something wrong to a customer?</p>
+          <p class="aside">You've been rejected for exactly this before — it's the first line in your profile. Fix it here, not after they tell you.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Brief on Monday. Call on Friday.</h2>
+      <p class="lede">
+        Six skills covering the whole arc, from decoding the brief to surviving the follow-up.
+        Type <code>/</code> in your agent and they're there. Use the ones you need.
+      </p>
+    </div>
+
+    <div class="flow">
+      <div class="step">
+        <span class="num">FIRST, ONCE</span>
+        <code>/profile-builder</code>
+        <p>A ten-minute interview covering <strong>what you've actually done</strong> and where your skill doesn't yet show up on paper. Everything else reads it. Without it the toolkit is generic; with it, it knows your patterns.</p>
+      </div>
+      <div class="step">
+        <span class="num">STEP 1</span>
+        <code>/assignment-framing</code>
+        <p>Reads the brief, <strong>researches the company live</strong>, names what's really being tested, and allocates depth against the hours you actually have — so a four-hour brief doesn't get a twenty-hour plan.</p>
+      </div>
+      <div class="step">
+        <span class="num">THROUGHOUT</span>
+        <code>/thought-partner</code>
+        <p>The colleague who won't let you gloss. Pushes when the thinking is thin, <strong>develops it when it's good</strong>, and tells you when your own experience belongs on the page and isn't there.</p>
+      </div>
+      <div class="step">
+        <span class="num">IF ASKED FOR</span>
+        <code>/prototype-builder</code>
+        <p>Researches the real product first — palette, patterns, tone — then builds a mockup that <strong>looks like it belongs inside it</strong>, with the narrative you'll use to present it.</p>
+      </div>
+      <div class="step">
+        <span class="num">BEFORE YOU SEND</span>
+        <code>/assignment-evaluator</code>
+        <p>An honest read against the bar for your field, plus a <strong>cold-read mode</strong> that deliberately forgets the conversation and grades it like a stranger with forty minutes and four other submissions.</p>
+      </div>
+      <div class="step">
+        <span class="num">BEFORE THE CALL</span>
+        <code>/assignment-defense</code>
+        <p>The mock panel. Hiring manager, skeptical engineer, and <strong>the person whose territory this steps on</strong> — one at a time, pressing twice, because a rehearsal that's easier than the real thing costs you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">What it's actually like</p>
+      <h2>The pushback is the product.</h2>
+      <p class="lede">
+        Any model will tell you your draft looks strong. That's the problem. These skills are
+        built to do the opposite, because the reviewer will.
+      </p>
+    </div>
+
+    <div class="cards">
+      <div class="chat">
+        <div class="chat-head">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="chat-title">assignment-evaluator — cold read</span>
+        </div>
+        <div class="turn">
+          <span class="who who-ai">AI</span>
+          <div>
+            <span class="verdict">Borderline</span>
+            <p>I have no history with this document. Reading it the way they will:</p>
+            <ul>
+              <li>Section 3 <b>names</b> the feature and never defines the inputs, the failure case, or the fallback. An engineer can't start from this.</li>
+              <li>No pivot triggers anywhere. This is a timeline, not a plan.</li>
+              <li>Strong problem framing. Genuinely — the second paragraph is the best thing here.</li>
+            </ul>
+            <p class="aside">Now comparing against your profile: your documented primary gap showed up to a reader who wasn't looking for it. That's the whole finding. It's live, not historical.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat">
+        <div class="chat-head">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="chat-title">assignment-defense — panel</span>
+        </div>
+        <div class="turn">
+          <span class="who who-ai">AI</span>
+          <p><b>Skeptical engineer:</b> How long does this take to build, and what did you assume about our architecture?</p>
+        </div>
+        <div class="turn you">
+          <span class="who who-you">YOU</span>
+          <p>Maybe a quarter? Though if that's off I could scope it down…</p>
+        </div>
+        <div class="turn">
+          <span class="who who-ai">AI</span>
+          <p><b>Skeptical engineer:</b> A quarter is optimistic. You know we're on a monolith?</p>
+        </div>
+        <div class="turn you">
+          <span class="who who-you">YOU</span>
+          <p>You're right, I'll pull it back to a smaller first phase.</p>
+        </div>
+        <div class="turn">
+          <span class="who who-ai">AI</span>
+          <p>Stepping out of role. <em>You just gave up a defensible position because I sounded confident</em> — I gave you no argument, only a tone. Your original phasing was fine. Say it again, and this time hold it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="yours">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Make it yours</p>
+      <h2>Two files, both yours to edit.</h2>
+      <p class="lede">
+        Everything personal lives in <code>~/.interview-toolkit</code>, outside the repo. Nothing
+        you write there is tracked by git, sent anywhere, or overwritten when you update.
+      </p>
+    </div>
+
+    <div class="split">
+      <div>
+        <div class="file">
+          <div class="file-name">~/.interview-toolkit/profile.md</div>
+          <div class="file-body"><b>## Evidence: what you've actually done</b>
+- Domains you know cold: usage-based
+  billing, developer onboarding
+- Shipped: replaced manual quoting with
+  self-serve checkout (9 mo, 4 eng)
+- Unfair advantage: five years in ops
+  before you moved into product
+
+<b>## Gaps: where it isn't visible yet</b>
+Primary: your solution sections read like
+vision docs. An engineer can't pull three
+sprint tickets out of them.
+
+<b>## Behavioral pattern</b>
+In 1:1 feedback you soften a position
+before you've been out-argued.
+→ So: push once more before accepting
+  agreement as resolution.</div>
+        </div>
+        <p style="margin-top:16px;color:var(--muted);font-size:.95rem">
+          Written by <code>/profile-builder</code> from a short interview. Half of it is what
+          you're good at — because a toolkit that only knows your weaknesses can help you write
+          a competent answer, and never <em>your</em> answer.
+        </p>
+      </div>
+
+      <div>
+        <h3>The rubric decides the bar</h3>
+        <p style="color:var(--muted)">
+          Each discipline gets a rubric file: the standard being cleared, the dimensions the work
+          is judged on, what a strong response contains, and who's in the room when you defend
+          it. The skills read it instead of hard-coding one job's idea of good.
+        </p>
+        <ul class="plain">
+          <li><strong>Product</strong> ships calibrated from real interview feedback.</li>
+          <li><strong>Design, engineering, sales, support</strong> ship as honest starting points, labeled as such rather than pretending.</li>
+          <li><strong>Anything else</strong> is one file. Copy the template, set one line in your profile, done.</li>
+        </ul>
+        <p style="color:var(--muted)">
+          Editing them is the point, not an advanced feature. Change the bar to the one you're
+          actually held to. Delete a dimension nobody grades you on. Replace the panel with the
+          names of the people who'll really be on your call — that one change makes the defense
+          rehearsal dramatically better.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Install</p>
+      <h2>One command.</h2>
+      <p class="lede">
+        Installs into whichever tools it finds — Claude Code, Cursor, Codex — and seeds the
+        rubrics it will never overwrite again.
+      </p>
+    </div>
+
+    <div class="split">
+      <div>
+        <pre class="code has-copy"><button class="copy" data-copy="curl -fsSL https://raw.githubusercontent.com/amirklein/interview-toolkit/main/install.sh | bash">Copy</button><span class="p">$</span> curl -fsSL https://raw.githubusercontent.com/amirklein/interview-toolkit/main/install.sh | bash</pre>
+
+        <p style="margin-top:18px;color:var(--muted);font-size:.95rem">Or from a clone, if you'd rather read it first:</p>
+        <pre class="code"><span class="p">$</span> git clone https://github.com/amirklein/interview-toolkit
+<span class="p">$</span> cd interview-toolkit
+<span class="p">$</span> ./install.sh</pre>
+
+        <p style="margin-top:18px;color:var(--muted);font-size:.95rem">Then, in your agent:</p>
+        <pre class="code"><span class="p">&gt;</span> /profile-builder</pre>
+      </div>
+
+      <div>
+        <h3>After that</h3>
+        <ul class="plain">
+          <li><strong>Restart your editor</strong> — a fresh window, not just a new chat, the first time you add a skills directory. Then type <code>/</code> to check the six are listed.</li>
+          <li><strong>Run <code>/profile-builder</code> first.</strong> Ten minutes, and it's the difference between generic advice and advice that knows your patterns.</li>
+          <li><strong>The rest work without it</strong>, falling back to general guidance. They just don't know you yet.</li>
+        </ul>
+        <h3 style="margin-top:28px">Other options</h3>
+        <ul class="plain">
+          <li><code>./install.sh -t cursor,codex -y</code> to pick tools without prompts.</li>
+          <li><code>./install.sh -p</code> to install into one project instead of your home directory.</li>
+          <li><code>./install.sh --update</code> to pull and reinstall. Your profile and edited rubrics survive it.</li>
+          <li><code>./install.sh --uninstall</code> to remove the skills. It leaves your profile alone.</li>
+        </ul>
+        <p style="color:var(--muted);font-size:.95rem">
+          Using Claude.ai or Claude Desktop instead? Turn on file creation in settings, upload
+          each skill folder under Customize → Skills, and paste your profile into the chat when
+          you start. Details are in the
+          <a href="https://github.com/amirklein/interview-toolkit#readme">README</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <p class="eyebrow">Honestly</p>
+      <h2>What this is and isn't.</h2>
+    </div>
+
+    <div class="split" style="gap:36px">
+      <div>
+        <h3 style="margin-bottom:.8em">It won't</h3>
+        <ul class="plain no">
+          <li>Write your assignment. You'd have to defend it on a call, and you'd lose.</li>
+          <li>Tell you it's great. That's what every other chat window is for.</li>
+          <li>Get you past a bar you can't actually clear.</li>
+          <li>Replace doing the thinking. It makes the thinking harder, on purpose.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:.8em">It will</h3>
+        <ul class="plain yes">
+          <li>Argue with you before a stranger gets the chance.</li>
+          <li>Notice when you've left your best material out.</li>
+          <li>Tell you what a reviewer will think, with the passage that caused it.</li>
+          <li>Make you say it out loud under pressure while it's still a rehearsal.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <p class="eyebrow">Questions</p>
+      <h2>Reasonable things to ask.</h2>
+    </div>
+
+    <div class="qa">
+      <h3>Isn't this just cheating?</h3>
+      <p>
+        If you use it to have a model write your assignment, yes, and it will cost you on the
+        follow-up call, which is where every claim in your document becomes a question. The
+        skills are built the other way around — the evaluator hunts for anything you can't
+        defend, and the defense skill makes you defend it out loud.
+      </p>
+      <p>
+        What it's for is narrower and more honest: most people don't lose these because they
+        lack the skill. They lose because a week of pressure, a blank page, and no one to argue
+        with produces work that's thinner than they are.
+      </p>
+    </div>
+
+    <div class="qa">
+      <h3>I'm not a product manager. Does it work for me?</h3>
+      <p>
+        The method is discipline-neutral and the standards are a file you control. Product ships
+        calibrated from real feedback; design, engineering, sales, and support ship as honest
+        starting points that say so. Anything else is one file away — copy the template, set one
+        line in your profile.
+      </p>
+    </div>
+
+    <div class="qa">
+      <h3>Where does my data go?</h3>
+      <p>
+        Nowhere. Your profile is a markdown file in your home directory, read by the agent you
+        already use and already trust with your work. There's no account, no service, and nothing
+        here that phones home. Uninstalling doesn't touch it.
+      </p>
+    </div>
+
+    <div class="qa">
+      <h3>Why does the profile ask what I'm good at?</h3>
+      <p>
+        Because the failure mode of AI-assisted assignment work is competence without a
+        fingerprint — technically fine, and indistinguishable from every other submission. The
+        toolkit needs to know your domains and your war stories to say "this section should be
+        the migration you actually ran, not a generic risk list."
+      </p>
+    </div>
+
+    <div class="qa">
+      <h3>Do I have to run the questionnaire?</h3>
+      <p>
+        No. Everything works unpersonalized and says so once. But the sharpest thing these skills
+        do is catch your own documented pattern before a reviewer does, and they can't do that
+        until they know what it is.
+      </p>
+    </div>
+
+    <div class="qa">
+      <h3>Can I change how hard it pushes?</h3>
+      <p>
+        Yes, and the interesting version of that question is whether you should. The one thing
+        worth keeping is the double push: when you concede a point, it asks once more. If you
+        gave in because the argument was better, that's an update, and it says so. If you gave in
+        because it sounded confident, you just found something out about yourself that's worth
+        more than the point.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Open source under MIT. Built for anyone in the middle of a process.</span>
+    <span>
+      <a href="https://github.com/amirklein/interview-toolkit">GitHub</a> ·
+      <a href="https://github.com/amirklein/interview-toolkit/issues">Issues</a> ·
+      <a href="https://agentskills.io">Agent Skills</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+// Copy buttons. Only enhancement on the page; the command is selectable without it.
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var text = btn.getAttribute('data-copy');
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(text).then(function () {
+      var was = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = was; }, 1400);
+    });
+  });
+});
+</script>
+
+</body>
+</html>
