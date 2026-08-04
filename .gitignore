@@ -1,0 +1,13 @@
+.DS_Store
+
+# `./install.sh -p` installs into the current directory, so running it from
+# inside a clone drops copies of the skills into these folders. They're
+# generated, and nobody should be committing them back.
+.claude/skills/
+.cursor/skills/
+.codex/skills/
+
+# Personal profile and rubrics normally live in ~/.interview-toolkit. This
+# covers the case where INTERVIEW_TOOLKIT_HOME points at a checkout — nobody's
+# answers about their own rejections should end up in a pull request.
+.interview-toolkit/
