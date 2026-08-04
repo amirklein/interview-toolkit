@@ -4,11 +4,14 @@ description: >
   Use this skill whenever someone needs to build a prototype, mockup, or interactive demo as part of a
   take-home assignment or interview exercise. Triggers include: I need to build a prototype, the
   assignment asks for a mockup, create a demo of this feature, show what this would look like,
-  prototype this flow, build a clickable version. Also trigger when an assignment brief includes any
-  request for visual demonstration, interactive mockup, or product simulation. This skill researches
-  the real product first so the prototype matches actual UI patterns, then builds it with the new
-  feature layered on top and a narrative that makes the thinking behind it visible. Works for any
-  discipline; calibrates to the person via ~/.interview-toolkit/profile.md.
+  prototype this flow, build a clickable version, write me a Lovable or v0 prompt for this. Also
+  trigger when an assignment brief includes any request for visual demonstration, interactive mockup,
+  or product simulation. This skill researches the real product first so the prototype matches actual
+  UI patterns, then builds it in whatever environment the person is already working in — real files in
+  an IDE, an interactive artifact in a chat — with the new feature layered on top and a narrative that
+  makes the thinking behind it visible. It can instead write a prompt for a prototyping tool like
+  Lovable or v0 if the person prefers to keep iterating there. Works for any discipline; calibrates to
+  the person via ~/.interview-toolkit/profile.md.
 ---
 
 # Prototype Builder
@@ -104,21 +107,54 @@ rubric.
 
 ---
 
-## Step 4 — Build it
+## Step 4 — Build it, here
 
-**Match the format to the environment.** The brief's requirement comes first, then whatever the
-current tool does best:
+**The default is to build the prototype yourself, right now, in whatever the person is already
+working in.** Don't send them somewhere else to make it. You have the product research from Step 2
+in context, you can iterate on a sentence of feedback, and the result is a file they own rather than
+a project in someone's cloud account.
 
-- **Interactive React component** — the default in environments that render artifacts inline (Claude
-  Desktop, Claude.ai). Click-through, state-driven UI, shareable in the conversation.
-- **A single self-contained HTML file** — the best default in an IDE or terminal environment like
-  Cursor, Codex, or Claude Code. One file, opens in any browser, no build step, easy to attach to an
-  email or drop in a repo.
-- **Static frames for a deck** — when the deliverable is slides, build the screens and export images
-  rather than sending a link nobody will click.
-- **Figma or a specific named tool** — if the brief demands it, say plainly that you can't produce a
-  native file, and offer the strongest alternative: a high-fidelity HTML prototype that can be
-  screenshotted into the required format. Let the person decide.
+What that means depends on where you're running, and you should just pick and go:
+
+- **In an IDE or terminal agent** (Cursor, Claude Code, Codex) — write real files into the workspace.
+  Default to **one self-contained HTML file**: opens in any browser, no build step, no dependencies,
+  easy to email or drop into a repo. Reach for a small React or Vite app only when the interaction
+  genuinely needs it, because a build step the person has to run is a build step that breaks the
+  morning it's due. Where you can, open it or screenshot it and check your own work.
+- **In a chat that renders artifacts** (Claude.ai, Claude Desktop) — build it as an interactive React
+  component. Click-through, state-driven, visible in the conversation.
+- **When the deliverable is a deck** — build the screens, then capture them as images. A slide with a
+  real screenshot beats a link nobody will open during a review.
+
+### If they'd rather use a prototyping tool
+
+Some people would prefer to build in Lovable, v0, Bolt, Replit, or similar — because they want to keep
+iterating there afterwards, or because it's what they know. That's a legitimate choice, so offer it
+once, plainly, and don't argue:
+
+> "I can build this here, or write it up as a prompt you can paste into Lovable or v0. Building here
+> is faster to iterate and gives you a file you own; the prompt is better if you want to keep working
+> on it in that tool afterwards."
+
+If they choose the prompt, it isn't a one-liner. Carry everything the research earned, or the tool
+will produce a generic app and the credibility gained in Step 2 is thrown away:
+
+- The design language from Step 2 — palette with actual hex values, type hierarchy, component patterns,
+  border and spacing feel, tone of UI copy
+- Every screen and state to produce, in order, and what each one is for
+- The realistic content: real-sounding names, plausible numbers, the product's own vocabulary
+- The interactions that matter, and what happens on each
+- An explicit instruction not to redesign or "improve" the surrounding product
+
+Hand it over as a single pasteable block, and offer to revise it once they've seen the first output.
+
+### If the brief names a tool
+
+If it demands Figma, or a specific named tool you can't write to, say so plainly rather than pretending
+otherwise. Then offer the strongest available path — usually a high-fidelity prototype built here and
+screenshotted into the required format — and let the person decide. Don't quietly substitute.
+
+### Whichever path
 
 **Use the design language from Step 2.** Match the palette, the type hierarchy, the component
 patterns, and the tone of UI copy. If the product uses dense tables, use dense tables — don't
@@ -165,10 +201,16 @@ Before calling it done:
 
 If any answer is no, fix it before presenting it as finished.
 
+If you wrote a prompt for a prototyping tool instead of building it, the same questions apply to
+whatever comes back — so ask to see it. A prompt that produced a generic app hasn't done the job, and
+one more round of revision is much cheaper than submitting it.
+
 ---
 
 ## Standards
 
+- **Build it where they are.** Sending someone to another tool by default costs an account, a fresh
+  start, and everything you already learned about the product. Offer that path; don't take it unasked.
 - **Research before building.** Always. A prototype that doesn't match the real product signals
   someone who didn't do their homework, and that impression outlasts the demo.
 - **Fewer screens, higher fidelity.** Don't sprawl.

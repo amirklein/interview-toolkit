@@ -20,7 +20,7 @@ stays in `~/.interview-toolkit` on your machine.
 | `/profile-builder` | First, once | A ten-minute interview covering what you've actually done and where your skill isn't visible on paper yet. Writes `~/.interview-toolkit/profile.md`, which everything else reads. |
 | `/assignment-framing` | When the brief lands | Reads the brief, researches the company and domain live, names what's really being evaluated, allocates depth against your actual hours, and builds the attack plan. |
 | `/thought-partner` | Throughout | The colleague who won't let you gloss. Pushes when the thinking is thin, develops it when it's good, and tells you when your own experience belongs on the page and isn't there. |
-| `/prototype-builder` | If a mockup is asked for | Researches the real product first, then builds a prototype that looks like it belongs inside it, plus the narrative you'll present it with. |
+| `/prototype-builder` | If a mockup is asked for | Researches the real product first, then builds the prototype right where you're working — real files in your IDE, an artifact in chat — plus the narrative you'll present it with. Or writes the Lovable/v0 prompt, if you'd rather build there. |
 | `/assignment-evaluator` | Before you submit | An honest read against the bar for your field. Includes a cold-read mode that forgets the conversation and grades it like a stranger would. |
 | `/assignment-defense` | Before the follow-up call | A mock panel. Hiring manager, skeptical peer, and the person whose territory this steps on — pressing twice, because a rehearsal easier than the real thing costs you. |
 
