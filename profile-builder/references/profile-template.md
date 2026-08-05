@@ -27,6 +27,7 @@ that read it are speaking to the person.
 - **Discipline**: product
 - **Level target**: Senior PM
 - **Context**: B2B SaaS, Series B stage
+- **Directness preference**: direct
 - **Updated**: 2026-03-14
 
 ## Evidence: what you've actually done
@@ -87,3 +88,8 @@ no heading. Better a three-line profile that's all true than a full template hal
 **Never invent evidence.** Everything under Evidence and Signature stories has to come from
 the person. If they didn't say it, it doesn't go in. A profile that inflates gets used to
 write claims into an assignment the person then has to defend on a call.
+
+**Directness changes delivery, never the conclusion.** The skills use this preference to choose
+how they state criticism: gentle gives a clear issue and a constructive way in; direct is plain;
+brutal is concise and reviewer-like. None of those settings permit false reassurance, hostility, or
+withholding a clear verdict.

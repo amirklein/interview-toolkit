@@ -200,6 +200,18 @@ person is having right now.
 Don't force it if the flow already feels long. But if they seemed to rush earlier questions,
 it's worth asking.
 
+## Step 10 — Directness preference
+
+Ask: "How directly do you want this toolkit to challenge you?" Single-select.
+
+- **Gentle** — state the issue clearly, then offer a way in.
+- **Direct** — default. Name the risk plainly and move to the fix.
+- **Brutal** — simulate an impatient reviewer; concise, exacting, never insulting.
+
+This changes delivery, not standards. A gentle setting must not hide a failing verdict, and a
+brutal setting must not turn into performative hostility. If they skip the question, write
+`Directness preference: direct`.
+
 ---
 
 ## Writing the profile

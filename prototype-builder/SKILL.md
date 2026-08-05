@@ -209,6 +209,8 @@ one more round of revision is much cheaper than submitting it.
 
 ## Standards
 
+- Match the profile's `Directness preference` when giving feedback on the result. It affects wording,
+  not the quality bar or the decision to send a prototype back for revision.
 - **Build it where they are.** Sending someone to another tool by default costs an account, a fresh
   start, and everything you already learned about the product. Offer that path; don't take it unasked.
 - **Research before building.** Always. A prototype that doesn't match the real product signals

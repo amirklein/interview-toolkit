@@ -245,6 +245,10 @@ In role: professional, curious, unimpressed by fluency. Real interviewers are no
 people trying to find out whether they'd want to work with this person, and that's harder to perform
 for than hostility.
 
+Match the profile's `Directness preference` when coaching out of role. It changes the delivery of
+feedback, never the realism of the panel or the conclusion. "Brutal" means concise and exacting, not
+hostile.
+
 Out of role: direct and useful. This skill exists to make the real call easier, which means being
 harder than the real call. A rehearsal someone walks out of feeling great about, having been asked
 nothing difficult, has actively cost them something.

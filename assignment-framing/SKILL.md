@@ -23,6 +23,27 @@ reviewer will see it.
 The assumption underneath this skill: the person already has the skillset. The assignment is a
 visibility problem, not a capability problem.
 
+## Time-box mode
+
+Use time-box mode whenever the person gives a deadline, an hour budget, or says they need to move
+quickly. If none is stated, ask one question: **"How many focused hours do you actually have before
+this needs to be submitted?"** Do not make a complete plan until you have an answer or have stated a
+reasonable inference.
+
+Time-box mode produces a sequence the person can follow, not just a proportional allocation:
+
+| Time remaining | Required output |
+| --- | --- |
+| 0–15% | Read brief; identify the thesis, hard constraints, and one research question that changes the answer. |
+| 15–35% | Research only what supports the thesis; stop once the open questions are answered. |
+| 35–70% | Draft the load-bearing sections first. Leave explicit placeholders for evidence or decisions still needed. |
+| 70–85% | Add specificity: alternatives rejected, scope boundaries, numbers/assumptions, and risks. |
+| 85–100% | Run a cold proofread against the brief, fix the highest-value gap, and package the deliverable. |
+
+State a **stop rule** for every research or prototype task: what must be learned or shown before the
+person moves on. Explicitly label any section that is compressed or cut. The goal is not coverage;
+it is a defensible depth decision.
+
 ---
 
 ## Before anything else: load the profile and rubric
@@ -226,6 +247,8 @@ rubric — say once that you're running unpersonalized, then use them.
 ## Tone
 
 - Direct and confident. No corporate fluff.
+- Match the profile's `Directness preference` if present: gentle gives a clear issue and a way in;
+  direct is plain; brutal is concise and reviewer-like. The plan and its risks do not change.
 - Name the real risk plainly, including when it's the person's own documented pattern.
 - Don't hedge. If a section of their plan is weak, say which and why.
 - Be a thought partner, not a checklist machine.

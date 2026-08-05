@@ -23,6 +23,9 @@ DO_UNINSTALL=0
 DO_UPDATE=0
 PROJECT_LOCAL=0
 TARGETS_ARG=""
+DO_DRY_RUN=0
+DO_BACKUP=0
+BACKUP_ROOT=""
 
 say() { printf '%s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
@@ -40,6 +43,8 @@ Options:
                       directory (./.cursor/skills rather than ~/.cursor/skills).
   -y, --yes           Non-interactive. Use with --target, or accept the detected
                       tools.
+      --dry-run       Show what would be installed, replaced, or seeded; change nothing.
+      --backup        Move existing toolkit skill folders to a dated backup before replacing them.
       --update        Pull the latest version, then reinstall.
       --uninstall     Remove the toolkit's skills from the selected targets.
                       Leaves your profile and rubrics alone.
@@ -50,6 +55,8 @@ Examples:
   ./install.sh -y                       # install to whatever is detected
   ./install.sh -t cursor,codex -y       # specific tools, no prompts
   ./install.sh -t all -p -y             # all three, into this project
+  ./install.sh --dry-run -t codex       # inspect an update before changing files
+  ./install.sh --backup --update -t codex -y
   ./install.sh --uninstall -t cursor    # remove from Cursor
 
 Your profile and rubrics live in ~/.interview-toolkit and are never touched by
@@ -63,6 +70,8 @@ while [ $# -gt 0 ]; do
     --target=*)    TARGETS_ARG="${1#*=}"; shift ;;
     -p|--project)  PROJECT_LOCAL=1; shift ;;
     -y|--yes)      ASSUME_YES=1; shift ;;
+    --dry-run)     DO_DRY_RUN=1; shift ;;
+    --backup)      DO_BACKUP=1; shift ;;
     --update)      DO_UPDATE=1; shift ;;
     --uninstall)   DO_UNINSTALL=1; shift ;;
     -h|--help)     usage; exit 0 ;;
@@ -255,19 +264,46 @@ fi
 # ---------------------------------------------------------------- install
 
 install_to() {
-  local dir="$1"
+  local dir="$1" tool="$2" skill
+  if [ "$DO_DRY_RUN" -eq 1 ]; then
+    for skill in "${SKILLS[@]}"; do
+      if [ -d "$dir/$skill" ]; then
+        if [ "$DO_BACKUP" -eq 1 ]; then
+          say "  would back up $dir/$skill -> $BACKUP_ROOT/$tool/$skill"
+        else
+          say "  would replace $dir/$skill"
+        fi
+      else
+        say "  would install $skill -> $dir/$skill"
+      fi
+    done
+    return
+  fi
+
   mkdir -p "$dir"
   for skill in "${SKILLS[@]}"; do
-    rm -rf "$dir/$skill"
+    if [ -d "$dir/$skill" ]; then
+      if [ "$DO_BACKUP" -eq 1 ]; then
+        mkdir -p "$BACKUP_ROOT/$tool"
+        mv "$dir/$skill" "$BACKUP_ROOT/$tool/$skill"
+        say "  backed up $dir/$skill -> $BACKUP_ROOT/$tool/$skill"
+      else
+        rm -rf "$dir/$skill"
+      fi
+    fi
     cp -R "$SOURCE/$skill" "$dir/$skill"
     say "  $skill -> $dir/$skill"
   done
 }
 
+if [ "$DO_BACKUP" -eq 1 ]; then
+  BACKUP_ROOT="$HOME_DIR/backups/$(date +%Y%m%d-%H%M%S)"
+fi
+
 say ""
 for tool in "${TARGETS[@]}"; do
   say "$(tool_label "$tool"):"
-  install_to "$(tool_dir "$tool")"
+  install_to "$(tool_dir "$tool")" "$tool"
 done
 
 # ---------------------------------------------------------------- rubrics
@@ -277,21 +313,27 @@ done
 seeded=0
 skipped=0
 if [ -d "$SOURCE/rubrics" ]; then
-  mkdir -p "$HOME_DIR/rubrics"
+  [ "$DO_DRY_RUN" -eq 1 ] || mkdir -p "$HOME_DIR/rubrics"
   for f in "$SOURCE"/rubrics/*.md; do
     [ -f "$f" ] || continue
     name="$(basename "$f")"
     if [ -e "$HOME_DIR/rubrics/$name" ]; then
       skipped=$((skipped + 1))
     else
-      cp "$f" "$HOME_DIR/rubrics/$name"
+      if [ "$DO_DRY_RUN" -eq 0 ]; then
+        cp "$f" "$HOME_DIR/rubrics/$name"
+      fi
       seeded=$((seeded + 1))
     fi
   done
 fi
 
 say ""
-say "Rubrics in $HOME_DIR/rubrics: $seeded added, $skipped left alone (yours)."
+if [ "$DO_DRY_RUN" -eq 1 ]; then
+  say "Rubrics in $HOME_DIR/rubrics: $seeded would be added, $skipped left alone (yours)."
+else
+  say "Rubrics in $HOME_DIR/rubrics: $seeded added, $skipped left alone (yours)."
+fi
 if [ "$skipped" -gt 0 ]; then
   say "Shipped versions are always in $SOURCE/rubrics if you want to compare."
 fi
@@ -299,6 +341,11 @@ fi
 # ---------------------------------------------------------------- next steps
 
 say ""
+if [ "$DO_DRY_RUN" -eq 1 ]; then
+  say "Dry run complete. No files were changed. Re-run without --dry-run to install."
+  exit 0
+fi
+
 say "Done. Two things left:"
 say ""
 say "  1. Restart your editor or agent — a fresh window, not just a new chat,"
