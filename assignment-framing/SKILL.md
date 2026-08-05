@@ -32,7 +32,11 @@ reasonable inference.
 
 Time-box mode produces a sequence the person can follow, not just a proportional allocation:
 
-| Time remaining | Required output |
+Percentages are elapsed share of the budget, so with four hours the first row ends at 0:36. Convert
+them to actual clock times for the person — a plan they can follow beats a plan they have to do
+arithmetic on.
+
+| Elapsed | Required output |
 | --- | --- |
 | 0–15% | Read brief; identify the thesis, hard constraints, and one research question that changes the answer. |
 | 15–35% | Research only what supports the thesis; stop once the open questions are answered. |

@@ -93,7 +93,11 @@ fi
 if [ -n "$script_dir" ] && [ -d "$script_dir/profile-builder" ]; then
   SOURCE="$script_dir"
   if [ "$DO_UPDATE" -eq 1 ]; then
-    if [ -d "$SOURCE/.git" ]; then
+    if [ "$DO_DRY_RUN" -eq 1 ]; then
+      # A dry run has to leave the checkout alone too, or "inspect before you
+      # change anything" quietly moves you to a new commit first.
+      say "Would pull the latest into $SOURCE (skipped for --dry-run)."
+    elif [ -d "$SOURCE/.git" ]; then
       say "Updating $SOURCE ..."
       git -C "$SOURCE" pull --ff-only --quiet || say "  could not fast-forward; installing what's here"
     else

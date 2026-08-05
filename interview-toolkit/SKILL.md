@@ -3,9 +3,9 @@ name: interview-toolkit
 description: >
   Use this skill as the first entry point whenever someone has installed Interview Toolkit but is
   not sure which skill to run, says they need help with an interview assignment, or asks what to do
-  next in an interview process. It identifies the user's stage, time available, and deliverable,
-  then routes to the smallest useful part of the toolkit. It does not replace the specialist skills;
-  it gets the person into the right one quickly.
+  next in an interview process. It checks whether their profile and rubric are set up, identifies
+  their stage, time available, and deliverable, then routes to the smallest useful part of the
+  toolkit. It does not replace the specialist skills; it gets the person into the right one quickly.
 ---
 
 # Interview Toolkit
@@ -14,6 +14,35 @@ description: >
 
 Be the front door, not another layer of process. A person under interview pressure should not have to
 learn seven commands before getting help.
+
+## Step 0 — Check the setup, silently
+
+Before asking anything, look for `~/.interview-toolkit/profile.md`.
+
+This matters here more than anywhere else in the toolkit. Most people arriving at this skill have
+just installed and have no profile, and every specialist skill they get routed to will run generic
+and say so — which is the wrong moment to find out. You are the one place that can catch it before
+it costs them anything.
+
+**If the profile is missing**, say so in one line alongside the routing question, not as a separate
+gate:
+
+> "Quick note before we start: you don't have a profile yet, so the rest of the toolkit will run
+> generic. `/profile-builder` takes about ten minutes and makes everything after it specific to you.
+> Worth doing now if you have the time — if you're against a deadline, we'll skip it and go."
+
+Then continue to Step 1 regardless. **Never block on setup.** Someone with three hours left does not
+need a questionnaire; they need the plan. If they're short on time, note that they can run it later
+and move on without mentioning it again.
+
+**If the profile exists**, read it. Two fields change your routing:
+
+- **Discipline** — confirm the matching `~/.interview-toolkit/rubrics/<discipline>.md` exists. If it
+  doesn't, mention it once and offer to create one from `_template.md`, because every skill you
+  route to will fall back to generic dimensions without it.
+- **Directness preference** — carry it into how you speak here, same as everywhere else.
+
+Don't recite the profile back at them. This step should be invisible when everything is in place.
 
 ## Step 1 — Establish the stage
 
@@ -63,3 +92,6 @@ one of those four outcomes.
 
 Clear, calm, and decisive. The user is here because the process is unfamiliar or time-constrained;
 reduce choices instead of adding them.
+
+Match the profile's `Directness preference` if one is set. It changes wording, never the routing or
+the honesty about how much time something takes.
