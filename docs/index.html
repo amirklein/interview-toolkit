@@ -216,6 +216,16 @@ section.plain { border-top: none; }
 .step p { margin: 10px 0 0; font-size: .95rem; color: var(--muted); }
 .step p strong { color: var(--ink); font-weight: 620; }
 
+/* The front door spans the row above the six specialists, which is both what it
+   is and what keeps seven cards from leaving an orphan in a three-up grid. */
+.step.wide { grid-column: 1 / -1; display: flex; gap: 28px; align-items: baseline; }
+.step.wide > div:first-child { flex: 0 0 232px; }
+.step.wide p { margin: 0; }
+@media (max-width: 900px) {
+  .step.wide { display: block; }
+  .step.wide p { margin-top: 10px; }
+}
+
 .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
 
@@ -378,15 +388,17 @@ footer a { color: var(--muted); }
     </div>
 
     <div class="flow">
+      <div class="step wide">
+        <div>
+          <span class="num">START HERE IF UNSURE</span>
+          <code>/interview-toolkit</code>
+        </div>
+        <p>The front door. It asks where you are in the process and how much time you actually have, then <strong>routes you to the smallest useful skill</strong> — so you don't have to learn a workflow the night before something is due.</p>
+      </div>
       <div class="step">
         <span class="num">FIRST, ONCE</span>
         <code>/profile-builder</code>
         <p>A ten-minute interview covering <strong>what you've actually done</strong> and where your skill doesn't yet show up on paper. Everything else reads it. Without it the toolkit is generic; with it, it knows your patterns.</p>
-      </div>
-      <div class="step">
-        <span class="num">START HERE IF UNSURE</span>
-        <code>/interview-toolkit</code>
-        <p>A single front door that asks where you are in the process and how much time you have, then <strong>routes you to the smallest useful skill</strong>. No need to learn the workflow under deadline pressure.</p>
       </div>
       <div class="step">
         <span class="num">STEP 1</span>

@@ -90,6 +90,7 @@ NSBezierPath(roundedRect: NSRect(x: margin, y: 152, width: 88, height: 5),
 // about what this is than any abstract shape would.
 let mono = NSFont.monospacedSystemFont(ofSize: 19, weight: .medium)
 let skills = [
+    "/interview-toolkit",
     "/profile-builder",
     "/assignment-framing",
     "/thought-partner",
@@ -98,7 +99,7 @@ let skills = [
     "/assignment-defense",
 ]
 let listX = 776.0
-var listY = 366.0
+var listY = 380.0
 for name in skills {
     accent.setFill()
     NSBezierPath(ovalIn: NSRect(x: listX, y: listY + 8, width: 5, height: 5)).fill()
