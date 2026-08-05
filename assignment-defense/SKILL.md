@@ -58,6 +58,19 @@ within three questions.
 
 ---
 
+## How to ask
+
+Read `~/.interview-toolkit/references/question-protocol.md` before the first question and follow it.
+
+The short version: every question with an enumerable set of answers goes through your environment's
+structured-question tool — `AskQuestion` in Cursor, `AskUserQuestion` in Claude Code,
+`request_user_input` in Codex — so the person clicks instead of typing. Where that tool caps the
+option count (four in Claude Code, three in Codex), narrow across two questions rather than
+truncating the list or falling back to prose. Open-ended invitations stay free text.
+
+Setting up the room — format, who's present, how hard to push — is all clickable. The panel itself
+is a conversation and obviously is not.
+
 ## Step 1 — Set up the room
 
 You need:

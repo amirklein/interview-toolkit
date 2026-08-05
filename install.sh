@@ -26,6 +26,7 @@ TARGETS_ARG=""
 DO_DRY_RUN=0
 DO_BACKUP=0
 BACKUP_ROOT=""
+ONBOARD=auto
 
 say() { printf '%s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
@@ -45,6 +46,8 @@ Options:
                       tools.
       --dry-run       Show what would be installed, replaced, or seeded; change nothing.
       --backup        Move existing toolkit skill folders to a dated backup before replacing them.
+      --onboard       Start profile-builder as soon as the install finishes, without asking.
+      --no-onboard    Don't offer to start profile-builder.
       --update        Pull the latest version, then reinstall.
       --uninstall     Remove the toolkit's skills from the selected targets.
                       Leaves your profile and rubrics alone.
@@ -57,6 +60,7 @@ Examples:
   ./install.sh -t all -p -y             # all three, into this project
   ./install.sh --dry-run -t codex       # inspect an update before changing files
   ./install.sh --backup --update -t codex -y
+  ./install.sh -y --onboard             # install, then go straight into profile-builder
   ./install.sh --uninstall -t cursor    # remove from Cursor
 
 Your profile and rubrics live in ~/.interview-toolkit and are never touched by
@@ -72,6 +76,8 @@ while [ $# -gt 0 ]; do
     -y|--yes)      ASSUME_YES=1; shift ;;
     --dry-run)     DO_DRY_RUN=1; shift ;;
     --backup)      DO_BACKUP=1; shift ;;
+    --onboard)     ONBOARD=yes; shift ;;
+    --no-onboard)  ONBOARD=no; shift ;;
     --update)      DO_UPDATE=1; shift ;;
     --uninstall)   DO_UNINSTALL=1; shift ;;
     -h|--help)     usage; exit 0 ;;
@@ -202,7 +208,8 @@ choose_interactively() {
 
   if [ -r /dev/tty ]; then
     printf 'Enter a number (1-5): '
-    read -r reply < /dev/tty
+    reply=""
+    read -r reply < /dev/tty || true
   else
     say "No terminal available to read a choice from. Re-run with --yes or --target."
     exit 1
@@ -342,6 +349,98 @@ if [ "$skipped" -gt 0 ]; then
   say "Shipped versions are always in $SOURCE/rubrics if you want to compare."
 fi
 
+# ---------------------------------------------------------------- references
+
+# The opposite policy to rubrics: this is toolkit mechanics rather than anything
+# personal, so it is refreshed every time. A stale question protocol means the
+# skills keep asking the way an older version told them to.
+if [ -d "$SOURCE/references" ]; then
+  if [ "$DO_DRY_RUN" -eq 1 ]; then
+    say "Would refresh $HOME_DIR/references/ (installer-managed)."
+  else
+    mkdir -p "$HOME_DIR/references"
+    cp "$SOURCE"/references/*.md "$HOME_DIR/references/"
+    say "References refreshed in $HOME_DIR/references (installer-managed, not yours to keep)."
+  fi
+fi
+
+# ------------------------------------------------------ codex question support
+
+# Codex only exposes its structured-question tool outside plan mode when this
+# feature flag is set, so without it every question in the toolkit degrades to
+# typing. It is someone else's config file, so we ask, back it up, and never
+# touch a key that already exists.
+CODEX_CONFIG="${CODEX_HOME:-$HOME/.codex}/config.toml"
+
+codex_picker_key_present() {
+  [ -f "$CODEX_CONFIG" ] &&
+    grep -Eq '^[[:space:]]*default_mode_request_user_input[[:space:]]*=' "$CODEX_CONFIG"
+}
+
+codex_picker_enabled() {
+  [ -f "$CODEX_CONFIG" ] &&
+    grep -Eq '^[[:space:]]*default_mode_request_user_input[[:space:]]*=[[:space:]]*true' "$CODEX_CONFIG"
+}
+
+enable_codex_picker() {
+  mkdir -p "$(dirname "$CODEX_CONFIG")"
+  if [ -f "$CODEX_CONFIG" ]; then
+    cp "$CODEX_CONFIG" "$CODEX_CONFIG.interview-toolkit-$(date +%Y%m%d-%H%M%S).bak"
+  fi
+  if [ -f "$CODEX_CONFIG" ] && grep -Eq '^[[:space:]]*\[features\][[:space:]]*$' "$CODEX_CONFIG"; then
+    awk '
+      /^[[:space:]]*\[features\][[:space:]]*$/ && !inserted {
+        print; print "default_mode_request_user_input = true"; inserted = 1; next
+      }
+      { print }
+    ' "$CODEX_CONFIG" > "$CODEX_CONFIG.itk-tmp" && mv "$CODEX_CONFIG.itk-tmp" "$CODEX_CONFIG"
+  else
+    printf '\n[features]\ndefault_mode_request_user_input = true\n' >> "$CODEX_CONFIG"
+  fi
+}
+
+codex_manual_note() {
+  say "  To make the toolkit's questions clickable in Codex, add this to $CODEX_CONFIG:"
+  say ""
+  say "      [features]"
+  say "      default_mode_request_user_input = true"
+  say ""
+}
+
+if [ "$DO_DRY_RUN" -eq 0 ] && printf '%s\n' "${TARGETS[@]}" | grep -qx codex; then
+  say ""
+  if codex_picker_enabled; then
+    say "Codex: click-to-select questions already enabled."
+  elif codex_picker_key_present; then
+    say "Codex: default_mode_request_user_input is set to something other than true in"
+    say "$CODEX_CONFIG. Leaving it alone — change it by hand if you want clickable questions."
+  else
+    say "Codex asks questions as plain text unless one flag is set."
+    if [ "$ASSUME_YES" -eq 1 ]; then
+      say "Not changing your config in non-interactive mode."
+      codex_manual_note
+    elif [ -r /dev/tty ]; then
+      printf 'Add default_mode_request_user_input = true to %s? [y/N] ' "$CODEX_CONFIG"
+      # An EOF here — a closed stdin, or someone pressing Ctrl-D — must not take
+      # the whole installer down under `set -e` after the skills are in place.
+      codex_reply=""
+      read -r codex_reply < /dev/tty || say ""
+      case "$codex_reply" in
+        y|Y|yes|YES)
+          enable_codex_picker
+          say "  Done. Existing config backed up alongside it. Restart Codex to pick it up."
+          ;;
+        *)
+          say "  Left alone."
+          codex_manual_note
+          ;;
+      esac
+    else
+      codex_manual_note
+    fi
+  fi
+fi
+
 # ---------------------------------------------------------------- next steps
 
 say ""
@@ -350,7 +449,94 @@ if [ "$DO_DRY_RUN" -eq 1 ]; then
   exit 0
 fi
 
-say "Done. Two things left:"
+say "Done."
+
+# ------------------------------------------------------------------ onboarding
+
+# A fresh install can hand straight over to profile-builder, so the first thing
+# someone sees is the interview rather than an instruction to go find a skill
+# name. Only the CLIs can be driven this way: a GUI editor won't see the new
+# skills until its window is restarted, and no script can do that for it.
+cli_for_tool() {
+  case "$1" in
+    claude) printf 'claude' ;;
+    cursor) printf 'cursor-agent' ;;
+    codex)  printf 'codex' ;;
+  esac
+}
+
+ONBOARD_CLI=""
+for tool in "${TARGETS[@]}"; do
+  candidate="$(cli_for_tool "$tool")"
+  if [ -n "$candidate" ] && command -v "$candidate" >/dev/null 2>&1; then
+    ONBOARD_CLI="$candidate"
+    break
+  fi
+done
+
+ONBOARD_PROMPT="Use the profile-builder skill from Interview Toolkit to interview me now and write my profile to $HOME_DIR/profile.md. Follow $HOME_DIR/references/question-protocol.md: ask every enumerable question through your structured-question tool so I can click instead of typing."
+
+have_profile=0
+[ -f "$HOME_DIR/profile.md" ] && have_profile=1
+
+want_onboard=0
+case "$ONBOARD" in
+  yes) want_onboard=1 ;;
+  no)  want_onboard=0 ;;
+  auto)
+    # Don't march someone who already has a profile back through it, and don't
+    # ambush a scripted install with an interactive agent it can't answer.
+    if [ "$have_profile" -eq 0 ] && [ "$ASSUME_YES" -eq 0 ] &&
+       [ -n "$ONBOARD_CLI" ] && [ -r /dev/tty ]; then
+      say ""
+      say "One thing left: /profile-builder is what makes the rest of this specific to"
+      say "you rather than generic. Five to ten minutes, mostly clicking."
+      printf 'Start it now in %s? [Y/n] ' "$ONBOARD_CLI"
+      # On EOF, don't launch. Handing an interactive agent a stdin that has
+      # already closed produces an agent that exits on arrival.
+      onboard_reply=""
+      if read -r onboard_reply < /dev/tty; then
+        case "$onboard_reply" in
+          n|N|no|NO) want_onboard=0 ;;
+          *) want_onboard=1 ;;
+        esac
+      else
+        say ""
+        say "No answer read, so leaving it for later."
+      fi
+    fi
+    ;;
+esac
+
+if [ "$want_onboard" -eq 1 ] && [ -z "$ONBOARD_CLI" ]; then
+  # Asked for, but nothing to launch. The install itself succeeded, so say what
+  # happened and fall through rather than failing a scripted run.
+  say ""
+  say "Asked to start profile-builder, but no agent CLI is on PATH (looked for"
+  say "claude, cursor-agent, codex). Installing only; start it yourself below."
+  want_onboard=0
+fi
+
+if [ "$want_onboard" -eq 1 ]; then
+  say ""
+  say "Starting $ONBOARD_CLI. If it asks you to sign in first, do that and then say"
+  say "\"run profile-builder\" — the skills are installed either way."
+  say ""
+  cd "$HOME"
+  # Reading from /dev/tty matters when this script arrived through a pipe:
+  # stdin is the script itself, and an interactive agent inheriting that is
+  # an agent that exits immediately.
+  if [ -r /dev/tty ]; then
+    exec "$ONBOARD_CLI" "$ONBOARD_PROMPT" < /dev/tty
+  else
+    exec "$ONBOARD_CLI" "$ONBOARD_PROMPT"
+  fi
+fi
+
+# ---------------------------------------------------------------- what's next
+
+say ""
+say "Two things left:"
 say ""
 say "  1. Restart your editor or agent — a fresh window, not just a new chat,"
 say "     the first time you add a skills directory. Then type / to check that"
@@ -358,8 +544,11 @@ say "     the skills are listed."
 say "  2. Run /profile-builder. It takes five to ten minutes and it's what makes"
 say "     everything else specific to you instead of generic."
 say ""
-if [ ! -f "$HOME_DIR/profile.md" ]; then
+if [ "$have_profile" -eq 0 ]; then
   say "No profile yet at $HOME_DIR/profile.md — /profile-builder writes it."
+  if [ -n "$ONBOARD_CLI" ]; then
+    say "Or skip the restart entirely:  $ONBOARD_CLI \"run profile-builder\""
+  fi
 else
   say "Existing profile found at $HOME_DIR/profile.md, left as it is."
 fi

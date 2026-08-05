@@ -50,25 +50,32 @@ their deficiencies.
 
 ## A note on how to ask
 
-**Use your environment's native structured-question UI for every question in this flow, not
-plain chat text.** Most environments that support this skill format (Cursor, Claude Code,
-Claude.ai/Desktop, Codex) have a dedicated tool for presenting selectable options — an "ask
-question" tool, a form tool, or similar. Use it for every question below: the multi-selects, the
-ranking step, and the free-text invites (most such tools support an open-text option alongside
-the choices).
+**Read `~/.interview-toolkit/references/question-protocol.md` before the first question and follow
+it.** This skill asks more questions than any other in the toolkit, so it is the one where the
+difference between clicking and typing decides whether someone finishes.
 
-Only fall back to plain text if no such tool exists in your environment. Typing questions as
-chat messages when a picker is available makes this slower and more error-prone to answer,
-which defeats much of the point of building it as a skill.
+The short version: every question with an enumerable set of answers goes through your environment's
+structured-question tool — `AskQuestion` in Cursor, `AskUserQuestion` in Claude Code,
+`request_user_input` in Codex — so the person clicks instead of typing. Where that tool caps the
+option count (four in Claude Code, three in Codex), narrow across two questions rather than
+truncating the list or falling back to prose.
 
-The one exception: the two fully open-ended invites (Step 4 and Step 8) are often more natural
-as plain text even when a UI tool exists. Use judgment.
+Two specifics that matter here, both spelled out in the protocol:
+
+- **Step 1 has six options and the gap lists have five or six.** Those exceed what Claude Code and
+  Codex can render in one question. Use the canonical narrowing tree for discipline, and ask long
+  multi-selects in successive passes of three. Never trim a list to fit — a gap nobody offered them
+  is a gap they won't name.
+- **Steps 3, 4, and 8 stay free text.** The evidence and the signature stories are the whole reason
+  the profile is worth building, and they cannot come off a menu. Offer a few examples to react to
+  if it helps someone start, then get out of the way. In Claude Code the question tool also times
+  out in about a minute, and these are the questions people think about for longer than that.
 
 ---
 
 ## Step 1 — Discipline
 
-Ask: "What's your discipline?" Single-select.
+Ask: "What's your discipline?" Single-select, clickable. The full menu is:
 
 - Product
 - Design
@@ -76,6 +83,9 @@ Ask: "What's your discipline?" Single-select.
 - Sales
 - Support / Customer Success
 - Something else — I'll describe it
+
+Six options is more than Claude Code or Codex will render in one question, so on those use the
+two-step narrowing tree in the question protocol. Every discipline stays reachable either way.
 
 This determines which gap options load in Step 5, and which rubric the rest of the toolkit will
 use. See `references/discipline-branches.md` for the option sets.

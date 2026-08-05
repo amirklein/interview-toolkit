@@ -75,9 +75,16 @@ first or `--backup` to retain dated copies under `~/.interview-toolkit/backups/`
 ./install.sh -y                       # install to whatever is detected
 ./install.sh -t cursor,codex -y       # specific tools, no prompts
 ./install.sh -p                       # into this project, not your home directory
+./install.sh --onboard                # install, then go straight into /profile-builder
 ./install.sh --update                 # pull and reinstall; your profile survives
 ./install.sh --uninstall              # remove the skills, keep your profile
 ```
+
+If you have one of the CLIs (`claude`, `cursor-agent`, `codex`) and no profile yet, the installer
+offers to start `/profile-builder` for you when it finishes, so you never have to know a skill name
+to get going. Decline it, pass `--no-onboard`, or run with `-y` and it stays out of your way. In a
+GUI editor it can't do this — new skills aren't visible until the window restarts — so there you get
+the two steps below instead.
 
 **Cloning alone doesn't install anything.** Agents look for skills in specific directories
 (`~/.claude/skills`, `~/.cursor/skills`, `~/.codex/skills`), so there's always one step after
@@ -92,6 +99,20 @@ cloning to put them there. That's all `install.sh` does.
 
 If a skill doesn't appear, check that `SKILL.md` landed directly inside its named folder
 (`~/.cursor/skills/profile-builder/SKILL.md`) rather than one level deeper. That's the usual cause.
+
+### One extra step for Codex
+
+These skills ask a lot of questions, and they're built to be answered by clicking rather than typing.
+Codex only allows that outside plan mode when a feature flag is set, so the installer offers to add
+it to `~/.codex/config.toml` (with a backup first, and it won't touch a value you've already set). If
+you'd rather do it yourself:
+
+```toml
+[features]
+default_mode_request_user_input = true
+```
+
+Cursor and Claude Code need nothing. Without the flag, Codex still works — it just asks in text.
 
 ### Claude.ai and Claude Desktop
 
@@ -111,14 +132,20 @@ git, sent anywhere, or touched by an update.
 ```
 ~/.interview-toolkit/
 ├── profile.md          # written by /profile-builder — yours
-└── rubrics/
-    ├── product.md      # the standard your work is held to — edit freely
-    ├── design.md
-    ├── engineering.md
-    ├── sales.md
-    ├── support.md
-    └── _template.md    # copy this to add a discipline
+├── rubrics/
+│   ├── product.md      # the standard your work is held to — edit freely
+│   ├── design.md
+│   ├── engineering.md
+│   ├── sales.md
+│   ├── support.md
+│   └── _template.md    # copy this to add a discipline
+└── references/
+    └── question-protocol.md   # how the skills ask questions — installer-managed
 ```
+
+Everything under `rubrics/` is yours and survives every update. `references/` is the exception: it's
+toolkit mechanics rather than anything personal, so the installer refreshes it each time. Don't keep
+edits there.
 
 **`profile.md`** has two halves, and both matter. The gaps tell the skills what to check hardest.
 The evidence — your domains, what you've shipped, the two or three stories you can tell with real
