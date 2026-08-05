@@ -6,6 +6,10 @@ generic template.
 
 Step numbers match `SKILL.md`.
 
+The option lists here run past what Claude Code and Codex will render in a single question. Ask them
+in successive passes of three rather than trimming them, per
+`~/.interview-toolkit/references/question-protocol.md`.
+
 ## Step 2 — Level and context
 
 - **Level**: Mid-level PM / Senior PM / Lead or Principal PM / Group PM or Head of Product

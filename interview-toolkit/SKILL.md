@@ -44,9 +44,22 @@ and move on without mentioning it again.
 
 Don't recite the profile back at them. This step should be invisible when everything is in place.
 
+## How to ask
+
+Read `~/.interview-toolkit/references/question-protocol.md` before the first question and follow it.
+
+The short version: every question with an enumerable set of answers goes through your environment's
+structured-question tool — `AskQuestion` in Cursor, `AskUserQuestion` in Claude Code,
+`request_user_input` in Codex — so the person clicks instead of typing. Where that tool caps the
+option count (four in Claude Code, three in Codex), narrow across two questions rather than
+truncating the list or falling back to prose. Open-ended invitations stay free text.
+
+This skill is the first thing many people run, so it is also the first impression of whether the
+toolkit feels like a tool or like a form. Do not type the stage list into chat.
+
 ## Step 1 — Establish the stage
 
-Ask one question, using the environment's question UI when available:
+Ask one clickable question. The full menu is:
 
 - I just received the brief
 - I am working through the assignment
@@ -54,6 +67,10 @@ Ask one question, using the environment's question UI when available:
 - I have a draft to review
 - I have a follow-up interview or presentation
 - I want to set up or refresh my profile
+
+Six options exceeds what Claude Code and Codex can render, so use the canonical two-step narrowing
+for stage in the question protocol rather than trimming the list. Never cut a stage: someone whose
+option is missing will pick the nearest wrong one and get routed to the wrong skill.
 
 Also ask for the submission deadline or their available focused hours if it is not already clear.
 Do not ask for information the person has already given.

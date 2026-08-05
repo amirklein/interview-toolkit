@@ -44,6 +44,18 @@ way.
 
 ---
 
+## How to ask
+
+Read `~/.interview-toolkit/references/question-protocol.md` before the first question and follow it.
+
+The short version: every question with an enumerable set of answers goes through your environment's
+structured-question tool — `AskQuestion` in Cursor, `AskUserQuestion` in Claude Code,
+`request_user_input` in Codex — so the person clicks instead of typing. Where that tool caps the
+option count (four in Claude Code, three in Codex), narrow across two questions rather than
+truncating the list or falling back to prose. Open-ended invitations stay free text.
+
+Cold-read mode is the obvious one to make clickable, since it's a binary with a real trade-off.
+
 ## Step 1 — Ingest both documents
 
 You need two things:

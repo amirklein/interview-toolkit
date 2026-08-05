@@ -128,6 +128,17 @@ your framing?"*
 
 ## Clarifying questions
 
+Read `~/.interview-toolkit/references/question-protocol.md` for the mechanics. Where a question has
+an enumerable set of answers, use your environment's structured-question tool — `AskQuestion` in
+Cursor, `AskUserQuestion` in Claude Code, `request_user_input` in Codex — so the person clicks
+instead of typing.
+
+This skill is the exception that proves the rule, though. Most of what you ask here is not
+enumerable: "who's the buyer," "what happens when it's wrong," "why that and not the other thing."
+Those are the questions doing the work, and turning them into a menu would hand the person the
+thinking you're trying to make them do. Pick from a list only when the choice really is a small
+closed set — which mode to work in, which section to attack next.
+
 Surface them **proactively** but **selectively**. Trigger one when:
 
 - An assumption is being made that the brief itself might resolve

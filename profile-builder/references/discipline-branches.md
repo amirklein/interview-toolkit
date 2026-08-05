@@ -7,6 +7,13 @@ four more specific flavors, keeping the multi-select plus free-text pattern.
 See `product-branch.md` for a fully worked example of how deep a branch goes when there's real
 calibration behind it.
 
+**On rendering these lists.** Every gap list below runs to five or six items, which is more than
+Claude Code (four) or Codex (three) will render in one question. Ask them in successive multi-select
+passes of three, carrying selections forward, per
+`~/.interview-toolkit/references/question-protocol.md`. Do not shorten a list to fit the ceiling.
+The whole point of showing a menu is that people recognize their own pattern faster than they recall
+it, and the item you drop is as likely as any other to be the one that lands.
+
 **Honesty note.** The Product branch is calibrated from real interview and assignment feedback.
 Design, Engineering, Sales, and Support are reasonable starting points based on general knowledge
 of what each discipline is evaluated on — they are *not* calibrated the same way. Treat them as

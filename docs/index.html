@@ -243,6 +243,10 @@ section.plain { border-top: none; }
 }
 
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+/* Grid items default to min-width:auto, so the long curl line inside a non-wrapping
+   <pre> widens its own column and scrolls the whole page sideways. The pre has its
+   own overflow-x; this keeps it there. */
+.split > * { min-width: 0; }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 32px; } }
 
 /* ---------------------------------------------------------------- code */
@@ -561,8 +565,8 @@ before you've been out-argued.
       <p class="eyebrow">Install</p>
       <h2>One command.</h2>
       <p class="lede">
-        Installs into whichever tools it finds — Claude Code, Cursor, Codex — and seeds the
-        rubrics it will never overwrite again.
+        Installs into whichever tools it finds — Claude Code, Cursor, Codex — seeds the rubrics it
+        will never overwrite again, and offers to walk you straight into setup.
       </p>
     </div>
 
@@ -582,17 +586,23 @@ before you've been out-argued.
       <div>
         <h3>After that</h3>
         <ul class="plain">
-          <li><strong>Restart your editor</strong> — a fresh window, not just a new chat, the first time you add a skills directory. Then type <code>/</code> to check the seven are listed.</li>
-          <li><strong>Run <code>/profile-builder</code> first.</strong> Ten minutes, and it's the difference between generic advice and advice that knows your patterns.</li>
-          <li><strong>The rest work without it</strong>, falling back to general guidance. They just don't know you yet.</li>
+          <li><strong>On the CLI, it just starts.</strong> If you have <code>claude</code>, <code>cursor-agent</code>, or <code>codex</code> and no profile yet, the installer offers to open <code>/profile-builder</code> for you — you never have to learn a skill name.</li>
+          <li><strong>In a GUI editor, restart it first</strong> — a fresh window, not just a new chat, the first time you add a skills directory. Then type <code>/</code> to check the seven are listed.</li>
+          <li><strong>The rest work without a profile</strong>, falling back to general guidance. They just don't know you yet.</li>
         </ul>
         <h3 style="margin-top:28px">Other options</h3>
         <ul class="plain">
           <li><code>./install.sh -t cursor,codex -y</code> to pick tools without prompts.</li>
+          <li><code>./install.sh --onboard</code> to skip the offer and go straight into setup.</li>
           <li><code>./install.sh -p</code> to install into one project instead of your home directory.</li>
           <li><code>./install.sh --update</code> to pull and reinstall. Your profile and edited rubrics survive it.</li>
           <li><code>./install.sh --uninstall</code> to remove the skills. It leaves your profile alone.</li>
         </ul>
+        <p style="color:var(--muted);font-size:.95rem">
+          <strong style="color:var(--ink)">On Codex,</strong> click-to-select questions need one
+          feature flag outside plan mode. The installer offers to add it, backs up your config
+          first, and won't touch a value you've already set.
+        </p>
         <p style="color:var(--muted);font-size:.95rem">
           Using Claude.ai or Claude Desktop instead? Turn on file creation in settings, upload
           each skill folder under Customize → Skills, and paste your profile into the chat when
@@ -682,6 +692,17 @@ before you've been out-argued.
         fingerprint — technically fine, and indistinguishable from every other submission. The
         toolkit needs to know your domains and your war stories to say "this section should be
         the migration you actually ran, not a generic risk list."
+      </p>
+    </div>
+
+    <div class="qa">
+      <h3>Do I have to type out every answer?</h3>
+      <p>
+        No. Anything with a fixed set of answers is a click, using whatever question tool your agent
+        has. The catch is that Claude Code and Codex cap how many options one question can show, so
+        the longer lists arrive as two quick picks rather than one — better than a menu quietly
+        trimmed down to fit. The open questions stay open on purpose: what you've actually shipped is
+        the part no list could have guessed, and it's the part that makes the difference.
       </p>
     </div>
 
